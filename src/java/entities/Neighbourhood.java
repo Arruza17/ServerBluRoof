@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
-public class Neighborhood implements Serializable {
+public class Neighbourhood implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,10 +154,10 @@ public class Neighborhood implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Neighborhood)) {
+        if (!(object instanceof Neighbourhood)) {
             return false;
         }
-        Neighborhood other = (Neighborhood) object;
+        Neighbourhood other = (Neighbourhood) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
