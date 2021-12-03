@@ -47,7 +47,7 @@ public class Service implements Serializable {
      * Service neighborhood.
      */
     @ManyToOne
-    private Neighborhood neighborhood;
+    private Neighbourhood neighborhood;
 
     /**
      *
@@ -117,7 +117,7 @@ public class Service implements Serializable {
      *
      * @return the neighborhood of the service.
      */
-    public Neighborhood getNeighborhood() {
+    public Neighbourhood getNeighborhood() {
         return neighborhood;
     }
 
@@ -125,7 +125,7 @@ public class Service implements Serializable {
      *
      * @param neighborhood service neighborhood.
      */
-    public void setNeighborhood(Neighborhood neighborhood) {
+    public void setNeighborhood(Neighbourhood neighborhood) {
         this.neighborhood = neighborhood;
     }
 
