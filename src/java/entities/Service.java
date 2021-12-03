@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Entity representing Services. Contains personal data, identification data and
@@ -35,10 +36,12 @@ public class Service implements Serializable {
     /**
      * Service address.
      */
+    @NotNull
     private String address;
     /**
      * Service name.
      */
+    @NotNull
     private String name;
     /**
      * Service neighborhood.

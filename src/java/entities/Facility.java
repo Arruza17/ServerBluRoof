@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Entity representing Facilities. Contains personal data, identification data
@@ -36,7 +38,7 @@ public class Facility implements Serializable {
     private FacilityType type;
     /**
      * Adquisition date of the facility.
-     */
+     */    
     private LocalDate adquisitionDate;
 
     /**

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Entity representing Neighborhoods. Contains personal data, identification
@@ -32,10 +33,12 @@ public class Neighborhood implements Serializable {
     /**
      * Neighborhood name.
      */
+    @NotNull
     private String name;
     /**
      * Neighborhood post code.
      */
+    @NotNull
     private Integer postCode;
     /**
      * List of neighborhood dwellings.
