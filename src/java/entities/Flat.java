@@ -5,6 +5,7 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Entity representing the flat of the dwelling. It contains the following
@@ -18,10 +19,12 @@ import javax.persistence.Table;
 public class Flat extends Dwelling {
 
     private static final long serialVersionUID = 1L;
+    @NotNull
     private Short nRooms;
     /**
      * number of bathrooms
      */
+    @NotNull
     private Short nBathrooms;
     /**
      * list of flat facilities
