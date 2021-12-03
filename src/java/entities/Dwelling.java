@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing dwellings. It contains the following fields: dwelling id,
@@ -29,6 +31,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Dwelling implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,8 +59,8 @@ public class Dwelling implements Serializable {
     /**
      * List of all the tags of the dwelling, for example: VEGAN_FRIENDLY
      */
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Tag.class)
     private List<Tag> tags;
     /**
      * Relational field containing Neighbourhood of the dwelling

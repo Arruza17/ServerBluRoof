@@ -4,6 +4,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing hosts. Contains whether they are resident or not as well
@@ -13,6 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Host extends User {
 
     /**
@@ -25,6 +28,7 @@ public class Host extends User {
     @OneToMany
     private List<Dwelling> dwellings;
 
+    @XmlTransient
     public List<Dwelling> getDwellings() {
         return dwellings;
     }

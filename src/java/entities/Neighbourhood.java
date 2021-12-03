@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing Neighborhoods. Contains personal data, identification
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Neighbourhood implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -103,6 +106,7 @@ public class Neighbourhood implements Serializable {
      *
      * @return a list with neighborhood dwellings.
      */
+    @XmlTransient
     public List<Dwelling> getDwellings() {
         return dwellings;
     }
@@ -119,6 +123,7 @@ public class Neighbourhood implements Serializable {
      *
      * @return a list with neighborhood dwellings.
      */
+    @XmlTransient
     public List<Service> getServices() {
         return services;
     }

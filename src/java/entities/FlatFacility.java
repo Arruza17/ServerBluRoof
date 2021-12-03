@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -18,27 +19,33 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class FlatFacility implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * Identification of the ids of flats and facilities.
+     */
+    @EmbeddedId
+    private FlatfacilityId flatFacilityids;
     /**
      * Identification of the flat facility.
      */
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @EmbeddedId
     private Long id;
     /**
      * Object flat
      */
-    @MapsId("flatId")
     @ManyToOne
+    @MapsId("flatId")
     private Flat flat;
     /**
      * Object facility
      */
-    @MapsId("facilityId")
+    
     @ManyToOne
+    @MapsId("facilityId")
     private Facility facility;
     /**
      * Enumeration of the condition
@@ -46,6 +53,16 @@ public class FlatFacility implements Serializable {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
+    public FlatfacilityId getFlatFacilityids() {
+        return flatFacilityids;
+    }
+
+    public void setFlatFacilityids(FlatfacilityId flatFacilityids) {
+        this.flatFacilityids = flatFacilityids;
+    }
+
+  
+    
     /**
      *
      * @return flat

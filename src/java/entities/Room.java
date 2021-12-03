@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing one room of the dwelling. It contains the following
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Room extends Dwelling {
 
     private static final long serialVersionUID = 1L;

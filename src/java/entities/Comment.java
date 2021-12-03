@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing comments. It contains the following fields: comment id,
@@ -21,17 +22,18 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     /**
      * Identification field for the comment
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @EmbeddedId
-    private Long id;
+    private CommentId commentId;
     /**
      * The text of the comment
      */
@@ -187,6 +189,14 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "entities.Comment[ id=" + id + " ]";
+    }
+
+    public CommentId getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(CommentId commentId) {
+        this.commentId = commentId;
     }
 
 }

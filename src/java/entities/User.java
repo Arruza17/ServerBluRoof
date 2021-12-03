@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing users. Contains basic personal data, identification
@@ -24,6 +26,7 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Table(schema = "bluroof")
 @Inheritance(strategy = InheritanceType.JOINED)
+@XmlRootElement
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,6 +83,8 @@ public class User implements Serializable {
     /**
      * User's list of tags related to the possible dwellings.
      */
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Tag.class)
     private List<Tag> tags;
 
     /**

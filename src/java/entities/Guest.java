@@ -5,6 +5,8 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing users. Contains data about their current professional
@@ -14,6 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Guest extends User {
 
     /**
@@ -28,6 +31,7 @@ public class Guest extends User {
     @OneToMany(cascade = ALL, mappedBy = "commenter")
     private List<Comment> comments;
 
+    @XmlTransient
     public List<Comment> getComments() {
         return comments;
     }
