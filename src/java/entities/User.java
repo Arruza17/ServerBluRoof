@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -73,7 +71,7 @@ public class User implements Serializable {
     /**
      * User's last date of password change.
      */
-    @Temporal(TemporalType.TIMESTAMP)
+  
     private LocalDateTime lastPasswordChange;
     /**
      * User's phone number.
