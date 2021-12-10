@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement
-public class Flat extends Dwelling {
+public class Flat extends Dwelling  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @NotNull

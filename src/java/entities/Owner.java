@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -16,8 +17,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(schema = "bluroof", name ="owner")
 @XmlRootElement
-public class Owner extends User {
+public class Owner extends User implements Serializable  {
 
+        private static final long serialVersionUID = 1L;  
     /**
      * owner's attribute to know whether it will be resident or not
      */

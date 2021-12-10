@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(schema = "bluroof", name ="room")
 @XmlRootElement
-public class Room extends Dwelling {
+public class Room extends Dwelling implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**

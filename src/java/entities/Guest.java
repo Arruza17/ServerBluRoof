@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
@@ -17,8 +18,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(schema = "bluroof", name ="guest")
 @XmlRootElement
-public class Guest extends User {
+public class Guest extends User implements Serializable  {
 
+        private static final long serialVersionUID = 1L;  
     /**
      * Guest's state WORKER/STUDENT/BOTH/UNEMPLOYED.
      */

@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name= "user", schema = "bluroof")
+@Inheritance(strategy = InheritanceType.JOINED)
 @XmlRootElement
 public class User implements Serializable {
 
@@ -38,6 +38,7 @@ public class User implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column (name="user_id")
     private Long id;
 
     @Column(unique = true)
