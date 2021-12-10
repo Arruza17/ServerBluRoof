@@ -39,9 +39,10 @@ public class Facility implements Serializable {
      */
     @Enumerated(EnumType.STRING)
     private FacilityType type;
+    
     /**
      * Adquisition date of the facility.
-     */    
+     */  
     private LocalDate adquisitionDate;
 
     /**

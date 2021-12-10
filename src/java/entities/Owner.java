@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement
-public class Host extends User {
+public class Owner extends User {
 
     /**
      * Host's attribute to know whether it will be resident or not

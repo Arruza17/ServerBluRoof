@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import javax.persistence.Embeddable;
 
 /**
@@ -8,7 +9,7 @@ import javax.persistence.Embeddable;
  * @author Ander Arruza
  */
 @Embeddable
-public class CommentId {
+public class CommentId implements Serializable {
 
     /**
      * Embedded id of the Comment class

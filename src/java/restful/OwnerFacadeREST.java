@@ -25,13 +25,13 @@ import javax.ws.rs.core.MediaType;
  * @author 2dam
  */
 @Stateless
-@Path("entities.host")
-public class HostFacadeREST extends AbstractFacade<Owner> {
+@Path("entities.owner")
+public class OwnerFacadeREST extends AbstractFacade<Owner> {
 
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
-    public HostFacadeREST() {
+    public OwnerFacadeREST() {
         super(Owner.class);
     }
 

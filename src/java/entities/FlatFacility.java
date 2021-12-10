@@ -51,7 +51,7 @@ public class FlatFacility implements Serializable {
      * Enumeration of the condition
      */
     @Enumerated(EnumType.STRING)
-    private Condition condition;
+    private FacilityCondition condition;
 
     public FlatfacilityId getFlatFacilityids() {
         return flatFacilityids;
@@ -99,7 +99,7 @@ public class FlatFacility implements Serializable {
      *
      * @return condition
      */
-    public Condition getCondition() {
+    public FacilityCondition getCondition() {
         return condition;
     }
 
@@ -107,7 +107,7 @@ public class FlatFacility implements Serializable {
      *
      * @param condition set condition
      */
-    public void setCondition(Condition condition) {
+    public void setCondition(FacilityCondition condition) {
         this.condition = condition;
     }
 

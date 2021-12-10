@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -66,6 +67,7 @@ public class Dwelling implements Serializable {
      * Relational field containing Neighbourhood of the dwelling
      */
     @NotNull
+    @ManyToOne
     private Neighbourhood neighbourhood;
     /**
      * Date in which the dwelling was made
@@ -75,8 +77,9 @@ public class Dwelling implements Serializable {
     /**
      * Relational field containing the host of the dwelling
      */
-    @NotNull
-    private Host host;
+   
+    @ManyToOne
+    private Owner host;
     /**
      * Rating of the dwelling. It is set the 0 when a new dwelling is created.
      * It will contain the average rating given by the users
