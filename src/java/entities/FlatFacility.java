@@ -23,35 +23,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FlatFacility implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    /**
-     * Identification of the ids of flats and facilities.
-     */
-    @EmbeddedId
-    private FlatfacilityId flatFacilityids;
     /**
      * Identification of the flat facility.
      */
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     /**
+     * Identification of the ids of flats and facilities.
+     */
+    @EmbeddedId
+    private FlatfacilityId flatFacilityids;
+
+    /**
      * Object flat
      */
-    @ManyToOne
     @MapsId("flatId")
+    @ManyToOne
     private Flat flat;
     /**
      * Object facility
      */
-    
-    @ManyToOne
+
     @MapsId("facilityId")
+    @ManyToOne
     private Facility facility;
     /**
      * Enumeration of the condition
      */
     @Enumerated(EnumType.STRING)
-    private FacilityCondition condition;
+    private FacilityCondition facilityCondition;
 
     public FlatfacilityId getFlatFacilityids() {
         return flatFacilityids;
@@ -61,8 +61,6 @@ public class FlatFacility implements Serializable {
         this.flatFacilityids = flatFacilityids;
     }
 
-  
-    
     /**
      *
      * @return flat
@@ -100,15 +98,15 @@ public class FlatFacility implements Serializable {
      * @return condition
      */
     public FacilityCondition getCondition() {
-        return condition;
+        return facilityCondition;
     }
 
     /**
      *
      * @param condition set condition
      */
-    public void setCondition(FacilityCondition condition) {
-        this.condition = condition;
+    public void setCondition(FacilityCondition facilityCondition) {
+        this.facilityCondition = facilityCondition;
     }
 
     /**
@@ -167,7 +165,7 @@ public class FlatFacility implements Serializable {
      */
     @Override
     public String toString() {
-        return "FlatFacility{" + "id=" + id + ", flat=" + flat + ", facility=" + facility + ", condition=" + condition + '}';
+        return "FlatFacility{" + "id=" + id + ", flat=" + flat + ", facility=" + facility + ", condition=" + facilityCondition + '}';
     }
 
 }

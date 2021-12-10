@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author jorge
  */
 @Entity
-@Table(schema = "bluroof")
+@Table(schema = "bluroof", name ="room")
 @XmlRootElement
 public class Room extends Dwelling {
 

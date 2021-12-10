@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
+@Table(schema = "bluroof", name ="guest")
 @XmlRootElement
 public class Guest extends User {
 

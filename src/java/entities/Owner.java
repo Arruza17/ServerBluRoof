@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Entity representing hosts. Contains whether they are resident or not as well
+ * Entity representing owners. Contains whether they are resident or not as well
  * as all the dwellings they are offering
  *
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
+@Table(schema = "bluroof", name ="owner")
 @XmlRootElement
 public class Owner extends User {
 
     /**
-     * Host's attribute to know whether it will be resident or not
+     * owner's attribute to know whether it will be resident or not
      */
     private Boolean isResident;
     /**
@@ -38,16 +38,16 @@ public class Owner extends User {
     }
 
     /**
-     * Gets whether the host resides or not
+     * Gets whether the owner resides or not
      *
-     * @return isResident if the host is resident
+     * @return isResident if the owner is resident
      */
     public Boolean getIsResident() {
         return isResident;
     }
 
     /**
-     * Sets if the host resides or not
+     * Sets if the owner resides or not
      *
      * @param isResident the residence value
      */

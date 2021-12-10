@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,9 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing users. Contains basic personal data, identification
@@ -25,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(schema = "bluroof")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @XmlRootElement
 public class User implements Serializable {
 
@@ -74,7 +77,7 @@ public class User implements Serializable {
     /**
      * User's last date of password change.
      */
-  
+
     private LocalDateTime lastPasswordChange;
     /**
      * User's phone number.
@@ -87,6 +90,21 @@ public class User implements Serializable {
     @ElementCollection(targetClass = Tag.class)
     private List<Tag> tags;
 
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<LastSignIn> lastSignIns;
+
+    @XmlTransient
+    public List<LastSignIn> getLastSignIns() {
+        return lastSignIns;
+    }
+
+    public void setLastSignIns(List<LastSignIn> lastSignIns) {
+        this.lastSignIns = lastSignIns;
+    }
+
+    
+    
+    
     /**
      * Method that gets the identification of the User
      *
