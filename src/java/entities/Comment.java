@@ -2,11 +2,12 @@ package entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -47,14 +48,14 @@ public class Comment implements Serializable {
     /**
      * Relational field containing the commenter who made it
      */
-    @MapsId("commenterId")
+    @JoinColumn(name="guestId",updatable=false,insertable=false)
     @NotNull
     @ManyToOne
     private Guest commenter;
     /**
      * Relational field containing the relation between comment and the dwelling
      */
-    @MapsId("dwellingId")
+    @JoinColumn(name="dwellingId",updatable=false, insertable=false)
     @ManyToOne
     private Dwelling dwelling;
 
