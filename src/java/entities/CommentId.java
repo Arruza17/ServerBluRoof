@@ -35,7 +35,5 @@ public class CommentId implements Serializable {
     public void setDwellingId(Long dwellingId) {
         this.dwellingId = dwellingId;
     }
-    
-    
-    
+
 }

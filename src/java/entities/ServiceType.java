@@ -15,25 +15,25 @@ public enum ServiceType {
     /**
      * health service type
      */
-    health,
+    HEALTH,
     /**
      * restoration service type
      */
-    restoration,
+    RESTORATION,
     /**
      * transport service type
      */
-    transport,
+    TRANSPORT,
     /**
      * education service type
      */
-    education,
+    EDUCATION,
     /**
-     * travels service type
+     * travelling service type
      */
-    travels,
+    TRAVELLING,
     /**
      * shopping service type
      */
-    shopping
+    SHOPPING
 }

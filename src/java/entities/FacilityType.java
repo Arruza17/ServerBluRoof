@@ -15,21 +15,21 @@ public enum FacilityType {
     /**
      * washing machine facility.
      */
-    washing_machine,
+    WASHING_MACHINE,
     /**
-     * dryer facility.
+     * dryer machine facility.
      */
-    dryer,
+    DRYER_MACHINE,
     /**
      * fridge facility.
      */
-    fridge,
+    FRIDGE,
     /**
      * wardrobe facility.
      */
-    wardrobe,
+    WARDROBE,
     /**
      * furnace facility.
      */
-    furnace,
+    FURNACE,
 }

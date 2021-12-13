@@ -8,12 +8,12 @@ package entities;
 public enum UserStatus {
 
     /**
-     *
+     * The user is ENABLED
      */
     ENABLED,
 
     /**
-     *
+     * The user is DISABLED
      */
     DISABLED
 }

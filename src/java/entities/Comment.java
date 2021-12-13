@@ -48,14 +48,14 @@ public class Comment implements Serializable {
     /**
      * Relational field containing the commenter who made it
      */
-    @JoinColumn(name="guestId",updatable=false,insertable=false)
+    @JoinColumn(name = "guestId", updatable = false, insertable = false)
     @NotNull
     @ManyToOne
     private Guest commenter;
     /**
      * Relational field containing the relation between comment and the dwelling
      */
-    @JoinColumn(name="dwellingId",updatable=false, insertable=false)
+    @JoinColumn(name = "dwellingId", updatable = false, insertable = false)
     @ManyToOne
     private Dwelling dwelling;
 
@@ -151,7 +151,25 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Integer representation for Account instance.
+     * Returns the Comment id
+     *
+     * @return the CommentId to get
+     */
+    public CommentId getCommentId() {
+        return commentId;
+    }
+
+    /**
+     * Sets the comment id
+     *
+     * @param commentId
+     */
+    public void setCommentId(CommentId commentId) {
+        this.commentId = commentId;
+    }
+
+    /**
+     * Integer representation for Comment instance.
      *
      * @return a hash code value for this object.
      */
@@ -190,14 +208,6 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "entities.Comment[ id=" + id + " ]";
-    }
-
-    public CommentId getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(CommentId commentId) {
-        this.commentId = commentId;
     }
 
 }

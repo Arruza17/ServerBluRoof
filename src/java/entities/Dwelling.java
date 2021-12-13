@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(schema = "bluroof", name="dwelling")
+@Table(schema = "bluroof", name = "dwelling")
 @XmlRootElement
 public class Dwelling implements Serializable {
 
@@ -77,7 +77,7 @@ public class Dwelling implements Serializable {
     /**
      * Relational field containing the host of the dwelling
      */
-   
+
     @ManyToOne
     private Owner host;
     /**
@@ -202,7 +202,7 @@ public class Dwelling implements Serializable {
     }
 
     /**
-     * Integer representation for Account instance.
+     * Integer representation for Dwelling instance.
      *
      * @return a hash code value for this object.
      */

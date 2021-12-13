@@ -15,11 +15,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof", name ="owner")
+@Table(schema = "bluroof", name = "owner")
 @XmlRootElement
-public class Owner extends User implements Serializable  {
+public class Owner extends User implements Serializable {
 
-        private static final long serialVersionUID = 1L;  
+    private static final long serialVersionUID = 1L;
     /**
      * owner's attribute to know whether it will be resident or not
      */
