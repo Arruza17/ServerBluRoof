@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
@@ -43,7 +44,7 @@ public class Facility implements Serializable {
     /**
      * Adquisition date of the facility.
      */  
-    private LocalDate adquisitionDate;
+    private Date adquisitionDate;
 
     /**
      *
@@ -84,7 +85,7 @@ public class Facility implements Serializable {
      *
      * @return Adquisition date of the facility.
      */
-    public LocalDate getAdquisitionDate() {
+    public Date getAdquisitionDate() {
         return adquisitionDate;
     }
 
@@ -92,7 +93,7 @@ public class Facility implements Serializable {
      *
      * @param adquisitionDate Facility adquisition date.
      */
-    public void setAdquisitionDate(LocalDate adquisitionDate) {
+    public void setAdquisitionDate(Date adquisitionDate) {
         this.adquisitionDate = adquisitionDate;
     }
 

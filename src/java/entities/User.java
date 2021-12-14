@@ -1,6 +1,8 @@
 package entities;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,7 +64,7 @@ public class User implements Serializable {
     /**
      * User's birth date.
      */
-    private LocalDate birthDate;
+    private Date birthDate;
     /**
      * User's status ENABLED/DISABLED.
      */
@@ -78,7 +80,7 @@ public class User implements Serializable {
      * User's last date of password change.
      */
 
-    private LocalDateTime lastPasswordChange;
+    private Timestamp lastPasswordChange;
     /**
      * User's phone number.
      */
@@ -101,8 +103,6 @@ public class User implements Serializable {
     public void setLastSignIns(List<LastSignIn> lastSignIns) {
         this.lastSignIns = lastSignIns;
     }
-
-    
     
     
     /**
@@ -200,7 +200,7 @@ public class User implements Serializable {
      *
      * @return birthdate the birthdate of the user
      */
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
@@ -209,7 +209,7 @@ public class User implements Serializable {
      *
      * @param birthDate the birthdate to set
      */
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -254,7 +254,7 @@ public class User implements Serializable {
      *
      * @return lastPasswordChange the last time the password was changed
      */
-    public LocalDateTime getLastPasswordChange() {
+    public Timestamp getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -263,7 +263,7 @@ public class User implements Serializable {
      *
      * @param lastPasswordChange the time the last password was changed
      */
-    public void setLastPasswordChange(LocalDateTime lastPasswordChange) {
+    public void setLastPasswordChange(Timestamp lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
@@ -345,4 +345,5 @@ public class User implements Serializable {
         return "entities.User[ id=" + id + " ]";
     }
 
+    
 }

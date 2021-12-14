@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -73,7 +74,7 @@ public class Dwelling implements Serializable {
      * Date in which the dwelling was made
      */
     @NotNull
-    private LocalDate constructionDate;
+    private Date constructionDate;
     /**
      * Relational field containing the host of the dwelling
      */
@@ -170,7 +171,7 @@ public class Dwelling implements Serializable {
      *
      * @return the date
      */
-    public LocalDate getConstructionDate() {
+    public Date getConstructionDate() {
         return constructionDate;
     }
 
@@ -179,7 +180,7 @@ public class Dwelling implements Serializable {
      *
      * @param constructionDate the construction date to set
      */
-    public void setConstructionDate(LocalDate constructionDate) {
+    public void setConstructionDate(Date constructionDate) {
         this.constructionDate = constructionDate;
     }
 

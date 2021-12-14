@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class LastSignIn implements Serializable {
     /**
      * The date of the last SignIn
      */
-    private LocalDateTime lastSignIn;
+    private Timestamp lastSignIn;
     /**
      * The user
      */
@@ -61,7 +62,7 @@ public class LastSignIn implements Serializable {
      *
      * @return the lastSignIn to get
      */
-    public LocalDateTime getLastSignIn() {
+    public Timestamp getLastSignIn() {
         return lastSignIn;
     }
 
@@ -70,7 +71,7 @@ public class LastSignIn implements Serializable {
      *
      * @param lastSignIn the lastSignIn LocalDateTime
      */
-    public void setLastSignIn(LocalDateTime lastSignIn) {
+    public void setLastSignIn(Timestamp lastSignIn) {
         this.lastSignIn = lastSignIn;
     }
 
