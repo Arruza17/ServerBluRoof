@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing dwellings. It contains the following fields: dwelling id,
@@ -58,12 +60,7 @@ public class Dwelling implements Serializable {
      * Square meters of the dwelling saved as m^2
      */
     private Double squareMeters;
-    /**
-     * List of all the tags of the dwelling, for example: VEGAN_FRIENDLY
-     */
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = Tag.class)
-    private List<Tag> tags;
+
     /**
      * Relational field containing Neighbourhood of the dwelling
      */
@@ -202,6 +199,8 @@ public class Dwelling implements Serializable {
         this.rating = rating;
     }
 
+   
+
     /**
      * Integer representation for Dwelling instance.
      *
@@ -242,7 +241,7 @@ public class Dwelling implements Serializable {
      */
     @Override
     public String toString() {
-        return "Dwelling{" + "id=" + id + ", address=" + address + ", hasWiFi=" + hasWiFi + ", squareMeters=" + squareMeters + ", tags=" + tags + ", neighbourhood=" + neighbourhood + ", constructionDate=" + constructionDate + ", host=" + host + ", rating=" + rating + ", comments=" + comments + '}';
+        return "Dwelling{" + "id=" + id + ", address=" + address + ", hasWiFi=" + hasWiFi + ", squareMeters=" + squareMeters  + ", neighbourhood=" + neighbourhood + ", constructionDate=" + constructionDate + ", host=" + host + ", rating=" + rating + ", comments=" + comments + '}';
     }
 
 }

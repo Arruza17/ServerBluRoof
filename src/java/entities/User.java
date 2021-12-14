@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(name= "user", schema = "bluroof")
+@Table(name = "user", schema = "bluroof")
 @Inheritance(strategy = InheritanceType.JOINED)
 @XmlRootElement
 public class User implements Serializable {
@@ -85,12 +85,6 @@ public class User implements Serializable {
      * User's phone number.
      */
     private String phoneNumber;
-    /**
-     * User's list of tags related to the possible dwellings.
-     */
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = Tag.class)
-    private List<Tag> tags;
 
     @OneToMany(cascade = ALL, mappedBy = "user")
     private List<LastSignIn> lastSignIns;
@@ -103,8 +97,7 @@ public class User implements Serializable {
     public void setLastSignIns(List<LastSignIn> lastSignIns) {
         this.lastSignIns = lastSignIns;
     }
-    
-    
+
     /**
      * Method that gets the identification of the User
      *
@@ -286,24 +279,6 @@ public class User implements Serializable {
     }
 
     /**
-     * Mehtod that gets all the tags of the user
-     *
-     * @return tags the List of tags of the user
-     */
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    /**
-     * Method that sets all the tags of the user
-     *
-     * @param tags the tags to be set
-     */
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    /**
      * Integer representation for User instance.
      *
      * @return the hashcode value
@@ -345,5 +320,4 @@ public class User implements Serializable {
         return "entities.User[ id=" + id + " ]";
     }
 
-    
 }
