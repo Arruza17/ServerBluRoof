@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,6 +33,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Ander Arruza
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating"
+    )
+    ,
+        @NamedQuery(
+            name = "findByMinConstructionDate", query = "SELECT d FROM Dwelling d WHERE d.constructionDate >= :date"
+    )
+})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "bluroof", name = "dwelling")
