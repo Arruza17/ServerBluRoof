@@ -1,14 +1,10 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,9 +15,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.validator.constraints.Email;
 
 /**
  * Entity representing users. Contains basic personal data, identification
@@ -56,14 +55,12 @@ public class User implements Serializable {
      * User's email.
      */
     @Column(unique = true)
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9]"
-            + "(?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9]])^?",
-            message = "{invalid.email}")
-
+    @Email(message="Please provide a valid email address")
     private String email;
     /**
      * User's birth date.
      */
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
     /**
      * User's status ENABLED/DISABLED.
@@ -79,8 +76,8 @@ public class User implements Serializable {
     /**
      * User's last date of password change.
      */
-
-    private Timestamp lastPasswordChange;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastPasswordChange;
     /**
      * User's phone number.
      */
@@ -247,7 +244,7 @@ public class User implements Serializable {
      *
      * @return lastPasswordChange the last time the password was changed
      */
-    public Timestamp getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -256,7 +253,7 @@ public class User implements Serializable {
      *
      * @param lastPasswordChange the time the last password was changed
      */
-    public void setLastPasswordChange(Timestamp lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 

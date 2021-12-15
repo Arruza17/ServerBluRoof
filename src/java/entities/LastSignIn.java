@@ -1,14 +1,16 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,7 +34,8 @@ public class LastSignIn implements Serializable {
     /**
      * The date of the last SignIn
      */
-    private Timestamp lastSignIn;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastSignIn;
     /**
      * The user
      */
@@ -62,7 +65,7 @@ public class LastSignIn implements Serializable {
      *
      * @return the lastSignIn to get
      */
-    public Timestamp getLastSignIn() {
+    public Date getLastSignIn() {
         return lastSignIn;
     }
 
@@ -71,7 +74,7 @@ public class LastSignIn implements Serializable {
      *
      * @param lastSignIn the lastSignIn LocalDateTime
      */
-    public void setLastSignIn(Timestamp lastSignIn) {
+    public void setLastSignIn(Date lastSignIn) {
         this.lastSignIn = lastSignIn;
     }
 

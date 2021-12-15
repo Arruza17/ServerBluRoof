@@ -1,17 +1,16 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import javax.persistence.Column;
+import java.util.Date;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -44,8 +43,8 @@ public class Comment implements Serializable {
     /**
      * Current time in which the comment was made
      */
-    @NotNull
-    private Timestamp commentDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date commentDate;
     /**
      * Relational field containing the commenter who made it
      */
@@ -102,7 +101,7 @@ public class Comment implements Serializable {
      *
      * @return the date of the comment
      */
-    public Timestamp getCommentDate() {
+    public Date getCommentDate() {
         return commentDate;
     }
 
@@ -111,7 +110,7 @@ public class Comment implements Serializable {
      *
      * @param commentDate the date of the comment
      */
-    public void setCommentDate(Timestamp commentDate) {
+    public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
     }
 

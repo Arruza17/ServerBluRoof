@@ -1,15 +1,13 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
+
 import java.util.List;
 import javax.persistence.CascadeType;
-import static javax.persistence.CascadeType.ALL;
-import javax.persistence.ElementCollection;
+
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,9 +16,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing dwellings. It contains the following fields: dwelling id,
@@ -70,13 +69,13 @@ public class Dwelling implements Serializable {
     /**
      * Date in which the dwelling was made
      */
-    @NotNull
+    @Temporal(TemporalType.DATE)
     private Date constructionDate;
     /**
      * Relational field containing the host of the dwelling
      */
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Owner host;
     /**
      * Rating of the dwelling. It is set the 0 when a new dwelling is created.
@@ -199,8 +198,6 @@ public class Dwelling implements Serializable {
         this.rating = rating;
     }
 
-   
-
     /**
      * Integer representation for Dwelling instance.
      *
@@ -241,7 +238,7 @@ public class Dwelling implements Serializable {
      */
     @Override
     public String toString() {
-        return "Dwelling{" + "id=" + id + ", address=" + address + ", hasWiFi=" + hasWiFi + ", squareMeters=" + squareMeters  + ", neighbourhood=" + neighbourhood + ", constructionDate=" + constructionDate + ", host=" + host + ", rating=" + rating + ", comments=" + comments + '}';
+        return "Dwelling{" + "id=" + id + ", address=" + address + ", hasWiFi=" + hasWiFi + ", squareMeters=" + squareMeters + ", neighbourhood=" + neighbourhood + ", constructionDate=" + constructionDate + ", host=" + host + ", rating=" + rating + ", comments=" + comments + '}';
     }
 
 }

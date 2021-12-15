@@ -1,8 +1,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
@@ -40,10 +39,11 @@ public class Facility implements Serializable {
      */
     @Enumerated(EnumType.STRING)
     private FacilityType type;
-    
+
     /**
      * Adquisition date of the facility.
-     */  
+     */
+    @Temporal(TemporalType.DATE)
     private Date adquisitionDate;
 
     /**

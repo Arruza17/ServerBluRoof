@@ -2,6 +2,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +28,7 @@ public class Owner extends User implements Serializable {
     /**
      * Relational field that contains the Dwellings offered
      */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "host")
     private List<Dwelling> dwellings;
 
     @XmlTransient
