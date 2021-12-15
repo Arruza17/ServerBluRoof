@@ -5,7 +5,7 @@ package entities;
  *
  * @author jorge
  */
-public enum Condition {
+public enum FacilityCondition {
 
     /**
      * Condition is new

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing Services. Contains personal data, identification data and
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Service implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +49,7 @@ public class Service implements Serializable {
      * Service neighborhood.
      */
     @ManyToOne
-    private Neighbourhood neighborhood;
+    private Neighbourhood neighbourhood;
 
     /**
      *
@@ -118,7 +120,7 @@ public class Service implements Serializable {
      * @return the neighborhood of the service.
      */
     public Neighbourhood getNeighborhood() {
-        return neighborhood;
+        return neighbourhood;
     }
 
     /**
@@ -126,7 +128,7 @@ public class Service implements Serializable {
      * @param neighborhood service neighborhood.
      */
     public void setNeighborhood(Neighbourhood neighborhood) {
-        this.neighborhood = neighborhood;
+        this.neighbourhood = neighborhood;
     }
 
     /**
@@ -165,7 +167,7 @@ public class Service implements Serializable {
 
     @Override
     public String toString() {
-        return "Service{" + "id=" + id + ", type=" + type + ", address=" + address + ", name=" + name + ", neighborhood=" + neighborhood + '}';
+        return "Service{" + "id=" + id + ", type=" + type + ", address=" + address + ", name=" + name + ", neighborhood=" + neighbourhood + '}';
     }
 
 }

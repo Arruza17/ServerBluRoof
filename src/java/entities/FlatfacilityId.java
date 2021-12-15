@@ -19,4 +19,22 @@ public class FlatfacilityId implements Serializable {
      * embedded id of the facility
      */
     private Long facilityId;
+
+    public Long getFlatId() {
+        return flatId;
+    }
+
+    public void setFlatId(Long flatId) {
+        this.flatId = flatId;
+    }
+
+    public Long getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(Long facilityId) {
+        this.facilityId = facilityId;
+    }
+    
+    
 }

@@ -1,8 +1,9 @@
 package entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing Facilities. Contains personal data, identification data
@@ -22,6 +24,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Facility implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,16 +39,18 @@ public class Facility implements Serializable {
      */
     @Enumerated(EnumType.STRING)
     private FacilityType type;
+
     /**
      * Adquisition date of the facility.
-     */    
-    private LocalDate adquisitionDate;
+     */
+    @Temporal(TemporalType.DATE)
+    private Date adquisitionDate;
 
     /**
      *
      * @return the id of the facility.
      */
-    @OneToMany(mappedBy = "facility")
+    @OneToMany(cascade = ALL, mappedBy = "facility")
     private List<FlatFacility> flatFacilities;
 
     public Long getId() {
@@ -80,7 +85,7 @@ public class Facility implements Serializable {
      *
      * @return Adquisition date of the facility.
      */
-    public LocalDate getAdquisitionDate() {
+    public Date getAdquisitionDate() {
         return adquisitionDate;
     }
 
@@ -88,7 +93,7 @@ public class Facility implements Serializable {
      *
      * @param adquisitionDate Facility adquisition date.
      */
-    public void setAdquisitionDate(LocalDate adquisitionDate) {
+    public void setAdquisitionDate(Date adquisitionDate) {
         this.adquisitionDate = adquisitionDate;
     }
 

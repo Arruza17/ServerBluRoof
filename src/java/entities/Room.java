@@ -1,8 +1,10 @@
 package entities;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing one room of the dwelling. It contains the following
@@ -12,8 +14,9 @@ import javax.validation.constraints.NotNull;
  * @author jorge
  */
 @Entity
-@Table(schema = "bluroof")
-public class Room extends Dwelling {
+@Table(schema = "bluroof", name ="room")
+@XmlRootElement
+public class Room extends Dwelling implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**

@@ -1,10 +1,15 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing users. Contains data about their current professional
@@ -13,21 +18,24 @@ import javax.persistence.Table;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
-public class Guest extends User {
+@Table(schema = "bluroof", name = "guest")
+@XmlRootElement
+public class Guest extends User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * Guest's state WORKER/STUDENT/BOTH/UNEMPLOYED.
      */
+    @Enumerated(EnumType.STRING)
     private ActualState actualState;
 
     /**
      * Relational field that contains the comments made
      */
-    
     @OneToMany(cascade = ALL, mappedBy = "commenter")
     private List<Comment> comments;
 
+    @XmlTransient
     public List<Comment> getComments() {
         return comments;
     }

@@ -1,9 +1,9 @@
 package entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,8 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.validator.constraints.Email;
 
 /**
  * Entity representing users. Contains basic personal data, identification
@@ -22,8 +28,9 @@ import javax.validation.constraints.Pattern;
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
+@Table(name = "user", schema = "bluroof")
 @Inheritance(strategy = InheritanceType.JOINED)
+@XmlRootElement
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,15 +55,13 @@ public class User implements Serializable {
      * User's email.
      */
     @Column(unique = true)
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9]"
-            + "(?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9]])^?",
-            message = "{invalid.email}")
-
+    @Email(message="Please provide a valid email address")
     private String email;
     /**
      * User's birth date.
      */
-    private LocalDate birthDate;
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
     /**
      * User's status ENABLED/DISABLED.
      */
@@ -71,16 +76,24 @@ public class User implements Serializable {
     /**
      * User's last date of password change.
      */
-  
-    private LocalDateTime lastPasswordChange;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastPasswordChange;
     /**
      * User's phone number.
      */
     private String phoneNumber;
-    /**
-     * User's list of tags related to the possible dwellings.
-     */
-    private List<Tag> tags;
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<LastSignIn> lastSignIns;
+
+    @XmlTransient
+    public List<LastSignIn> getLastSignIns() {
+        return lastSignIns;
+    }
+
+    public void setLastSignIns(List<LastSignIn> lastSignIns) {
+        this.lastSignIns = lastSignIns;
+    }
 
     /**
      * Method that gets the identification of the User
@@ -177,7 +190,7 @@ public class User implements Serializable {
      *
      * @return birthdate the birthdate of the user
      */
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
@@ -186,7 +199,7 @@ public class User implements Serializable {
      *
      * @param birthDate the birthdate to set
      */
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -231,7 +244,7 @@ public class User implements Serializable {
      *
      * @return lastPasswordChange the last time the password was changed
      */
-    public LocalDateTime getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -240,7 +253,7 @@ public class User implements Serializable {
      *
      * @param lastPasswordChange the time the last password was changed
      */
-    public void setLastPasswordChange(LocalDateTime lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
@@ -260,24 +273,6 @@ public class User implements Serializable {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    /**
-     * Mehtod that gets all the tags of the user
-     *
-     * @return tags the List of tags of the user
-     */
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    /**
-     * Method that sets all the tags of the user
-     *
-     * @param tags the tags to be set
-     */
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
     }
 
     /**

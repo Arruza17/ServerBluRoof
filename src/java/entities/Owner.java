@@ -1,30 +1,37 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Entity representing hosts. Contains whether they are resident or not as well
+ * Entity representing owners. Contains whether they are resident or not as well
  * as all the dwellings they are offering
  *
  * @author Yeray Sampedro
  */
 @Entity
-@Table(schema = "bluroof")
-public class Host extends User {
+@Table(schema = "bluroof", name = "owner")
+@XmlRootElement
+public class Owner extends User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
-     * Host's attribute to know whether it will be resident or not
+     * owner's attribute to know whether it will be resident or not
      */
     private Boolean isResident;
     /**
      * Relational field that contains the Dwellings offered
      */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "host")
     private List<Dwelling> dwellings;
 
+    @XmlTransient
     public List<Dwelling> getDwellings() {
         return dwellings;
     }
@@ -34,16 +41,16 @@ public class Host extends User {
     }
 
     /**
-     * Gets whether the host resides or not
+     * Gets whether the owner resides or not
      *
-     * @return isResident if the host is resident
+     * @return isResident if the owner is resident
      */
     public Boolean getIsResident() {
         return isResident;
     }
 
     /**
-     * Sets if the host resides or not
+     * Sets if the owner resides or not
      *
      * @param isResident the residence value
      */

@@ -1,16 +1,18 @@
 package entities;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity representing comments. It contains the following fields: comment id,
@@ -21,17 +23,18 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     /**
      * Identification field for the comment
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @EmbeddedId
-    private Long id;
+    private CommentId commentId;
     /**
      * The text of the comment
      */
@@ -40,19 +43,19 @@ public class Comment implements Serializable {
     /**
      * Current time in which the comment was made
      */
-    @NotNull
-    private LocalDateTime commentDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date commentDate;
     /**
      * Relational field containing the commenter who made it
      */
-    @MapsId("commenterId")
+    @JoinColumn(name = "guestId", updatable = false, insertable = false)
     @NotNull
     @ManyToOne
     private Guest commenter;
     /**
      * Relational field containing the relation between comment and the dwelling
      */
-    @MapsId("dwellingId")
+    @JoinColumn(name = "dwellingId", updatable = false, insertable = false)
     @ManyToOne
     private Dwelling dwelling;
 
@@ -98,7 +101,7 @@ public class Comment implements Serializable {
      *
      * @return the date of the comment
      */
-    public LocalDateTime getCommentDate() {
+    public Date getCommentDate() {
         return commentDate;
     }
 
@@ -107,7 +110,7 @@ public class Comment implements Serializable {
      *
      * @param commentDate the date of the comment
      */
-    public void setCommentDate(LocalDateTime commentDate) {
+    public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
     }
 
@@ -148,7 +151,25 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Integer representation for Account instance.
+     * Returns the Comment id
+     *
+     * @return the CommentId to get
+     */
+    public CommentId getCommentId() {
+        return commentId;
+    }
+
+    /**
+     * Sets the comment id
+     *
+     * @param commentId
+     */
+    public void setCommentId(CommentId commentId) {
+        this.commentId = commentId;
+    }
+
+    /**
+     * Integer representation for Comment instance.
      *
      * @return a hash code value for this object.
      */

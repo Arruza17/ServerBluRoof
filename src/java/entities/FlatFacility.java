@@ -8,9 +8,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -18,33 +20,47 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "bluroof")
+@XmlRootElement
 public class FlatFacility implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * Identification of the flat facility.
      */
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @EmbeddedId
     private Long id;
+    /**
+     * Identification of the ids of flats and facilities.
+     */
+    @EmbeddedId
+    private FlatfacilityId flatFacilityids;
+
     /**
      * Object flat
      */
-    @MapsId("flatId")
+    @JoinColumn(name="flatId",updatable=false,insertable=false)
     @ManyToOne
     private Flat flat;
     /**
      * Object facility
      */
-    @MapsId("facilityId")
+
+    @JoinColumn(name="facilityId",updatable=false,insertable=false)
     @ManyToOne
     private Facility facility;
     /**
      * Enumeration of the condition
      */
     @Enumerated(EnumType.STRING)
-    private Condition condition;
+    private FacilityCondition facilityCondition;
+
+    public FlatfacilityId getFlatFacilityids() {
+        return flatFacilityids;
+    }
+
+    public void setFlatFacilityids(FlatfacilityId flatFacilityids) {
+        this.flatFacilityids = flatFacilityids;
+    }
 
     /**
      *
@@ -82,16 +98,16 @@ public class FlatFacility implements Serializable {
      *
      * @return condition
      */
-    public Condition getCondition() {
-        return condition;
+    public FacilityCondition getCondition() {
+        return facilityCondition;
     }
 
     /**
      *
      * @param condition set condition
      */
-    public void setCondition(Condition condition) {
-        this.condition = condition;
+    public void setCondition(FacilityCondition facilityCondition) {
+        this.facilityCondition = facilityCondition;
     }
 
     /**
@@ -150,7 +166,7 @@ public class FlatFacility implements Serializable {
      */
     @Override
     public String toString() {
-        return "FlatFacility{" + "id=" + id + ", flat=" + flat + ", facility=" + facility + ", condition=" + condition + '}';
+        return "FlatFacility{" + "id=" + id + ", flat=" + flat + ", facility=" + facility + ", condition=" + facilityCondition + '}';
     }
 
 }
