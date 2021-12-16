@@ -107,7 +107,6 @@ public class Neighbourhood implements Serializable {
      *
      * @return a list with neighborhood dwellings.
      */
-    @XmlTransient
     public List<Dwelling> getDwellings() {
         return dwellings;
     }
@@ -124,7 +123,6 @@ public class Neighbourhood implements Serializable {
      *
      * @return a list with neighborhood dwellings.
      */
-    @XmlTransient
     public List<Service> getServices() {
         return services;
     }

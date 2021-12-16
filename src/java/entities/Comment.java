@@ -47,7 +47,7 @@ public class Comment implements Serializable {
     private Date commentDate;
     /**
      * Relational field containing the commenter who made it
-     */
+     */ 
     @JoinColumn(name = "guestId", updatable = false, insertable = false)
     @NotNull
     @ManyToOne

@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing Services. Contains personal data, identification data and
@@ -48,6 +49,7 @@ public class Service implements Serializable {
     /**
      * Service neighborhood.
      */
+    @XmlTransient
     @ManyToOne
     private Neighbourhood neighbourhood;
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,10 +29,11 @@ public class Owner extends User implements Serializable {
     /**
      * Relational field that contains the Dwellings offered
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "host")
+ 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "host", fetch = FetchType.EAGER)
     private List<Dwelling> dwellings;
 
-    @XmlTransient
+    
     public List<Dwelling> getDwellings() {
         return dwellings;
     }

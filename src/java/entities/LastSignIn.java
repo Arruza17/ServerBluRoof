@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing the last time the user has signIn into the application.
@@ -47,6 +48,7 @@ public class LastSignIn implements Serializable {
      *
      * @return the user to get
      */
+    @XmlTransient
     public User getUser() {
         return user;
     }

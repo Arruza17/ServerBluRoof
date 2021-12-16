@@ -8,11 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,8 +30,13 @@ import org.hibernate.validator.constraints.Email;
  *
  * @author Yeray Sampedro
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "logInUser", query = "SELECT u FROM User u WHERE u.login= :login and u.password= :password"),}
+)
+
 @Entity
-@Table(name = "user", schema = "bluroof")
+@Table(schema = "bluroof")
 @Inheritance(strategy = InheritanceType.JOINED)
 @XmlRootElement
 public class User implements Serializable {
@@ -50,12 +58,13 @@ public class User implements Serializable {
     /**
      * User's password.
      */
+
     private String password;
     /**
      * User's email.
      */
     @Column(unique = true)
-    @Email(message="Please provide a valid email address")
+    @Email(message = "Please provide a valid email address")
     private String email;
     /**
      * User's birth date.
@@ -83,10 +92,9 @@ public class User implements Serializable {
      */
     private String phoneNumber;
 
-    @OneToMany(cascade = ALL, mappedBy = "user")
+    @OneToMany(cascade = ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<LastSignIn> lastSignIns;
 
-    @XmlTransient
     public List<LastSignIn> getLastSignIns() {
         return lastSignIns;
     }
@@ -154,6 +162,7 @@ public class User implements Serializable {
      *
      * @return password user's password
      */
+    @XmlTransient
     public String getPassword() {
         return password;
     }
