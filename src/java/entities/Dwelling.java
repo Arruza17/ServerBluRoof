@@ -35,11 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @NamedQueries({
     @NamedQuery(
-            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating"
+            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating ORDER BY d.rating DESC"
     )
     ,
         @NamedQuery(
-            name = "findByMinConstructionDate", query = "SELECT d FROM Dwelling d WHERE d.constructionDate >= :date"
+            name = "findByMinConstructionDate", query = "SELECT d FROM Dwelling d WHERE d.constructionDate >= :date ORDER BY d.constructionDate DESC"
     )
 })
 @Entity

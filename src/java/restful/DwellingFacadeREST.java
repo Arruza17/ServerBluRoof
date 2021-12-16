@@ -38,54 +38,82 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
      * Logger for this class.
      */
     private final Logger LOGGER = Logger.getLogger(DwellingFacadeREST.class);
-
+    /**
+     * Constructor of the DwellingFacadeREST object
+     */
     public DwellingFacadeREST() {
         super(Dwelling.class);
     }
-
+     /**
+     * POST method to create dwellings: uses create business logic method.
+     * @param entity the new Dwelling object
+     */
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Dwelling entity) {
         super.create(entity);
     }
-
+    /**
+     * 
+     * @param id
+     * @param entity 
+     */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Long id, Dwelling entity) {
         super.edit(entity);
     }
-
+    /**
+     * 
+     * @param id 
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-
+    /**
+     * GET method for getting a dwelling by its id
+     * @param id The dwelling id
+     * @return A Dwelling object
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     public Dwelling find(@PathParam("id") Long id) {
         return super.find(id);
     }
-
+    /**
+     * 
+     * @return 
+     */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML})
     public List<Dwelling> findAll() {
         return super.findAll();
     }
-
+    /**
+     * 
+     * @param from
+     * @param to
+     * @return 
+     */
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML})
     public List<Dwelling> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+    /**
+     * 
+     * @param rate
+     * @return 
+     */
     @GET
-    @Path("rate/{rate}")
+    @Path("minRate/{rate}")
     @Produces({MediaType.APPLICATION_XML})
     public List<Dwelling> findByMinRating(@PathParam("rate") Short rate) {
         List<Dwelling> dwellings = null;
@@ -98,7 +126,11 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
         }
         return dwellings;
     }
-    
+    /**
+     * 
+     * @param date
+     * @return 
+     */
     @GET
     @Path("minConstructionDate/{date}")
     @Produces({MediaType.APPLICATION_XML})
@@ -108,19 +140,25 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
             LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date);
             dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate").setParameter("date", date).getResultList());
         } catch (Exception e) {
-            //LOGGER.log(Level.SEVERE,);
+            LOGGER.log(Level.SEVERE,e.getMessage());
             //throw new 
         }
         return dwellings;
     }
-
+    /**
+     * 
+     * @return 
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    /**
+     * 
+     * @return 
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
