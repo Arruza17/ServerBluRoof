@@ -2,6 +2,8 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,8 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author jorge
  */
+@NamedQueries({
+    @NamedQuery(name = "findRoomsWNaturalLight", query = "SELECT r FROM Room r where r.naturalLight=1 ORDER BY r.rating")
+    ,
+@NamedQuery(name = "findRoomsByNOutlets", query = "SELECT r FROM Room r where r.nOutlets=:nOutlets ORDER BY r.rating")
+})
+
 @Entity
-@Table(schema = "bluroof", name ="room")
+@Table(schema = "bluroof", name = "room")
 @XmlRootElement
 public class Room extends Dwelling implements Serializable {
 
