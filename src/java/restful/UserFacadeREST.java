@@ -46,6 +46,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         super(User.class);
     }
 
+    /**
+     * Method that creates a user
+     *
+     * @param entity the user to be crated
+     */
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML})
@@ -53,6 +58,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
         super.create(entity);
     }
 
+    /**
+     * Method used to edit data of a user
+     *
+     * @param id the id of the user to be edited
+     * @param entity the user with the modified data
+     */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
@@ -60,12 +71,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
         super.edit(entity);
     }
 
+    /**
+     * Deletes information about a user by id
+     *
+     * @param id the id of the user to be removed
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
+    /**
+     * Method that gets the data of an specific user by id
+     *
+     * @param id the id of the user
+     * @return User the user to be found
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
@@ -73,6 +95,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return super.find(id);
     }
 
+    /**
+     * Method that finds ALL users
+     *
+     * @return a list of users
+     */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML})
@@ -80,6 +107,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return super.findAll();
     }
 
+    /**
+     * Method used to page all the information
+     *
+     * @param from the first element of the pagination
+     * @param to the last element of the pagination
+     * @return paginated data
+     */
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML})
@@ -87,6 +121,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return super.findRange(new int[]{from, to});
     }
 
+    /**
+     * Method that counts the amount of users
+     *
+     * @return the amount of users
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -94,6 +133,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return String.valueOf(super.count());
     }
 
+    /**
+     * Method used to log in
+     *
+     * @param login the username
+     * @param password the password, encrypted
+     * @return user all the data of the user
+     */
     @GET
     @Path("login/{login}/password/{password}")
     @Produces({MediaType.APPLICATION_XML})
@@ -119,6 +165,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return user;
     }
 
+    /**
+     * Method used to reset the password of a user
+     *
+     * @param login the user to have the password reseted
+     */
     @GET
     @Path("reset/{user}")
     @Consumes({MediaType.APPLICATION_XML})
@@ -126,13 +177,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Creating new password");
             //Generate new password
-            SecureRandom random = new SecureRandom();       
+            SecureRandom random = new SecureRandom();
             byte bytes[] = new byte[16];
             random.nextBytes(bytes);
             byte array[] = random.generateSeed(16);
-            String pass= new String(array, Charset.forName("UTF-8"));
+            String pass = new String(array, Charset.forName("UTF-8"));
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
-            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass ).executeUpdate();
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass).executeUpdate();
             //Hashing the password
             // password = "HASHED PASSWORD";
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login"
@@ -142,6 +193,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
 
+    /**
+     * Method used to update the password of an specific user
+     *
+     * @param login the user of which the password will be changed
+     * @param password the new password
+     */
     @GET
     @Path("update/{user}/password/{pass}")
     @Consumes({MediaType.APPLICATION_XML})
