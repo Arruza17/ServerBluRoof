@@ -7,6 +7,7 @@ package restful;
 
 import entities.Neighbourhood;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,8 @@ import javax.ws.rs.core.MediaType;
 @Path("entities.neighbourhood")
 public class NeighbourhoodFacadeREST extends AbstractFacade<Neighbourhood> {
 
+    private final Logger LOGGER = Logger.getLogger(NeighbourhoodFacadeREST.class.getName());
+    
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 

@@ -5,8 +5,15 @@
  */
 package restful;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import entities.Facility;
+import entities.FacilityType;
 import entities.Service;
+import entities.ServiceType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +35,8 @@ import javax.ws.rs.core.MediaType;
 @Path("entities.service")
 public class ServiceFacadeREST extends AbstractFacade<Service> {
 
+       private final Logger LOGGER = Logger.getLogger(ServiceFacadeREST.class.getName());
+    
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
@@ -87,5 +96,20 @@ public class ServiceFacadeREST extends AbstractFacade<Service> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+     
+    @GET
+    @Path("type/{serviceType}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Service> findByType(@PathParam("serviceType") String serviceType) {
+        List<Service> services = null;
+        try {
+            LOGGER.log(Level.INFO, "Getting the facilities by type {0}", serviceType);
+            ServiceType type = ServiceType.valueOf(serviceType);
+            services = new ArrayList<>(em.createNamedQuery("findByType").setParameter("serviceType", type).getResultList());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE,e.getMessage());
+            //throw new 
+        }
+        return services;
+    } 
 }

@@ -6,7 +6,12 @@
 package restful;
 
 import entities.Facility;
+import entities.FacilityType;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +25,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+
+
 /**
  *
  * @author 2dam
@@ -28,6 +35,8 @@ import javax.ws.rs.core.MediaType;
 @Path("entities.facility")
 public class FacilityFacadeREST extends AbstractFacade<Facility> {
 
+    private final Logger LOGGER = Logger.getLogger(FacilityFacadeREST.class.getName());
+    
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
@@ -37,14 +46,14 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void create(Facility entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Long id, Facility entity) {
         super.edit(entity);
     }
@@ -57,21 +66,21 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Facility find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Facility> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Facility> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -88,4 +97,49 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         return em;
     }
     
+    /**
+    @GET
+    @Path("adquisitionDate/{date}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Facility> findByAdqDate(@PathParam("date") Date adquisitionDate) {
+        List<Facility> facilities=null;
+        try{
+            facilities=new ArrayList<>(em.createNamedQuery("findByAdqDate").setParameter("date",adquisitionDate).getResultList());
+        }catch(Exception e){
+            LOGGER.severe("FacilityEJB -> findByAdqDate()"+ e.getMessage());
+            
+        }                
+        return facilities;
+    }
+*/
+    @GET
+    @Path("adquisitionDate/{date}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Facility> findFacilityByAdqDate(@PathParam("date") Date date) {
+        List<Facility> facilities = null;
+        try {
+            LOGGER.log(Level.INFO, "Getting the facilities by adquisition date {0}", date);
+            facilities = new ArrayList<>(em.createNamedQuery("findFacilityByAdqDate").setParameter("date", date).getResultList());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE,e.getMessage());
+            //throw new 
+        }
+        return facilities;
+    } 
+    
+    @GET
+    @Path("type/{facilityType}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Facility> findFacilityByType(@PathParam("facilityType") String facilityType) {
+        List<Facility> facilities = null;
+        try {
+            LOGGER.log(Level.INFO, "Getting the facilities by type {0}", facilityType);
+            FacilityType type = FacilityType.valueOf(facilityType);
+            facilities = new ArrayList<>(em.createNamedQuery("findFacilityByType").setParameter("facilityType", type).getResultList());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE,e.getMessage());
+            //throw new 
+        }
+        return facilities;
+    } 
 }
