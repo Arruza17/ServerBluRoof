@@ -38,44 +38,56 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
      * Logger for this class.
      */
     private final Logger LOGGER = Logger.getLogger(DwellingFacadeREST.class);
+
     /**
      * Constructor of the DwellingFacadeREST object
      */
     public DwellingFacadeREST() {
         super(Dwelling.class);
     }
-     /**
+
+    /**
      * POST method to create dwellings: uses create business logic method.
+     *
      * @param entity the new Dwelling object
      */
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Dwelling entity) {
+        LOGGER.info("Creating entity dwelling");
         super.create(entity);
     }
+
     /**
-     * 
-     * @param id
-     * @param entity 
+     * PUT method to edit dwelling: uses
+     *
+     * @param id the id of the dwelling
+     * @param entity the entity overriding the previous one
      */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Long id, Dwelling entity) {
+        LOGGER.info("Editting entity dwelling");
         super.edit(entity);
     }
+
     /**
-     * 
-     * @param id 
+     * DELETE method that deletes a dwelling
+     *
+     * @param id the id of the dwelling
      */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
+        LOGGER.info("Removing entity dwelling");
         super.remove(super.find(id));
     }
+
     /**
      * GET method for getting a dwelling by its id
+     *
      * @param id The dwelling id
      * @return A Dwelling object
      */
@@ -83,23 +95,29 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     public Dwelling find(@PathParam("id") Long id) {
+        LOGGER.log(Level.INFO, "Getting Dwelling with id {0}", id);
         return super.find(id);
     }
+
     /**
-     * 
-     * @return 
+     * GET method that returns all the dwellings
+     *
+     * @return all the dwellings
      */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML})
     public List<Dwelling> findAll() {
+        LOGGER.info("Getting all the Dwellings");
         return super.findAll();
     }
+
     /**
-     * 
-     * @param from
-     * @param to
-     * @return 
+     * GET method that returns a list with the expecified number in range
+     *
+     * @param from the start value
+     * @param to the finish value
+     * @return the dwelling list
      */
     @GET
     @Path("{from}/{to}")
@@ -107,10 +125,12 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     public List<Dwelling> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
+
     /**
-     * 
-     * @param rate
-     * @return 
+     * GET method that finds all the dwelling starting with a minimun rating
+     *
+     * @param rate the minimun rate
+     * @return the dwelling higher than the minimum rate
      */
     @GET
     @Path("minRate/{rate}")
@@ -126,10 +146,13 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
         }
         return dwellings;
     }
+
     /**
-     * 
-     * @param date
-     * @return 
+     * GET method that returns all the dwellings by the minimum construction
+     * date
+     *
+     * @param date the minimum construction date
+     * @return all the dwelling's higher than the minimum construction date
      */
     @GET
     @Path("minConstructionDate/{date}")
@@ -140,14 +163,16 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
             LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date);
             dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate").setParameter("date", date).getResultList());
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE,e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage());
             //throw new 
         }
         return dwellings;
     }
+
     /**
-     * 
-     * @return 
+     * GET method that returns the amount of all the dwellings
+     *
+     * @return the number of Dwellings as String
      */
     @GET
     @Path("count")
@@ -155,9 +180,11 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+
     /**
-     * 
-     * @return 
+     * Gets the entity Manager
+     *
+     * @return the entity manager
      */
     @Override
     protected EntityManager getEntityManager() {
