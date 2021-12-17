@@ -1,6 +1,9 @@
 package restful;
 
 import entities.User;
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,7 +101,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
         User user = null;
         try {
             LOGGER.info("Getting the login information");
-            //"SELECT u FROM user u WHERE u.login=:user and u.password=:password"
+            //Decipher pasword
+            password = "DECIPHERED PASSWORD";
+
+            //Hash password       
+            password = "HASHED PASSWORD";
+            //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
             user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", password).getSingleResult();
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
@@ -109,6 +117,48 @@ public class UserFacadeREST extends AbstractFacade<User> {
             //Throw new read exception
         }
         return user;
+    }
+
+    @GET
+    @Path("reset/{user}")
+    @Consumes({MediaType.APPLICATION_XML})
+    public void resetPassword(@PathParam("user") String login) {
+        try {
+            LOGGER.info("Creating new password");
+            //Generate new password
+            SecureRandom random = new SecureRandom();       
+            byte bytes[] = new byte[16];
+            random.nextBytes(bytes);
+            byte array[] = random.generateSeed(16);
+            String pass= new String(array, Charset.forName("UTF-8"));
+            // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass ).executeUpdate();
+            //Hashing the password
+            // password = "HASHED PASSWORD";
+            // "UPDATE User u SET u.password=:newPass WHERE u.login= :login"
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
+            //Throw new read exception
+        }
+    }
+
+    @GET
+    @Path("update/{user}/password/{pass}")
+    @Consumes({MediaType.APPLICATION_XML})
+    public void changePassword(@PathParam("user") String login, @PathParam("pass") String password) {
+        try {
+            LOGGER.info("Updating password");
+            //Decipher pasword
+            //password = "DECIPHERED PASSWORD";
+            //Hash password       
+            // password = "HASHED PASSWORD";
+
+            // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", password).executeUpdate();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
+
+        }
     }
 
     @Override
