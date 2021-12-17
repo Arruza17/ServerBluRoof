@@ -3,6 +3,7 @@ package restful;
 import entities.Flat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +24,13 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("entities.flat")
 public class FlatFacadeREST extends AbstractFacade<Flat> {
-
+    /**
+     * Logger for this class.
+     */
+    private Logger LOGGER = Logger.getLogger(RoomFacadeREST.class.getName());
+    /**
+     * EJB object implementing business logic.
+     */
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
@@ -37,7 +44,11 @@ public class FlatFacadeREST extends AbstractFacade<Flat> {
     public void create(Flat entity) {
         super.create(entity);
     }
-
+    /**
+     * 
+     * @param id
+     * @param entity 
+     */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
@@ -45,8 +56,8 @@ public class FlatFacadeREST extends AbstractFacade<Flat> {
         super.edit(entity);
     }
       /**
-     * DELETE method to remove accounts: uses removeAccount business logic method.
-     * @param id The id for the account to be deleted.
+     * DELETE method to remove flats
+     * @param id The id for the flat to be deleted.
      */
     @DELETE
     @Path("{id}")
@@ -54,7 +65,11 @@ public class FlatFacadeREST extends AbstractFacade<Flat> {
         super.remove(super.find(id));
     }
     
-    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})

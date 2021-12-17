@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package restful;
 
 import entities.Room;
@@ -34,7 +29,9 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
      * Logger for this class.
      */
     private Logger LOGGER = Logger.getLogger(RoomFacadeREST.class.getName());
-
+    /**
+     * EJB object implementing business logic.
+     */
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
@@ -44,7 +41,6 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
 
     /**
      * POST method to create Rooms
-     *
      * @param entity the Room object containing the data
      */
     @POST
@@ -96,9 +92,9 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
     }
 /**
  * GET method for getting a range of rooms
- * @param from 
- * @param to
- * @return 
+ * @param from parameter of start
+ * @param to parameter of end
+ * @return  
  */
     @GET
     @Path("{from}/{to}")
@@ -107,8 +103,9 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
         return super.findRange(new int[]{from, to});
     }
 /**
+ * Get method for getting amount of rooms in plain text
  * 
- * @return 
+ * @return returns the number of Rooms as String
  */
     @GET
     @Path("count")
@@ -117,9 +114,9 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
         return String.valueOf(super.count());
     }
     /**
-     * 
-     * @param outlets
-     * @return 
+     * Get method for getting a list of the Rooms who have x number of outlets
+     * @param outlets Short with n of outlets
+     * @return  list with rooms that have x number of outlets
      */
     @GET
     @Path("nOutlets/{outlets}")
@@ -132,6 +129,11 @@ public class RoomFacadeREST extends AbstractFacade<Room> {
         }
         return resultado;
     }
+    /**
+     * Get method for getting a list of Rooms who have natural light
+     * @param naturalLight Short with the value of natural light
+     * @return list with rooms that have or dont have light
+     */
     @GET
     @Path("naturalLight/{naturalLight}")
     @Produces({MediaType.APPLICATION_XML})
