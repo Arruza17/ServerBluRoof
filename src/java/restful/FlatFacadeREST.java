@@ -162,9 +162,9 @@ public class FlatFacadeREST extends AbstractFacade<Flat> {
     }
 
     /**
-     * Get method for getting amount of rooms in plain text
+     * Get method for getting amount of Flat in plain text
      *
-     * @return returns the number of Rooms as String
+     * @return returns the number of Flat as String
      */
     @GET
     @Path("count")

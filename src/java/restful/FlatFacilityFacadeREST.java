@@ -99,10 +99,11 @@ public class FlatFacilityFacadeREST extends AbstractFacade<FlatFacility> {
         entities.FlatfacilityId key = getPrimaryKey(id);
         super.remove(super.find(key));
     }
-    /**
-     * 
-     * @param id
-     * @return 
+   /**
+     * Get method to obtain Flatfacility by id
+     *
+     * @param id The Flatfacilty id
+     * @return the Flatfacility by its id
      */
     @GET
     @Path("{id}")
@@ -111,21 +112,36 @@ public class FlatFacilityFacadeREST extends AbstractFacade<FlatFacility> {
         entities.FlatfacilityId key = getPrimaryKey(id);
         return super.find(key);
     }
-
+ /**
+     * Get method to obtain a list with all flatfacilities
+     *
+     * @return returns a list with all flatfacilities
+     */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<FlatFacility> findAll() {
         return super.findAll();
     }
-
+ /**
+     * GET method for getting a range of flatfacilities
+     *
+     * @param from parameter of start
+     * @param to parameter of end
+     * @return
+     */
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<FlatFacility> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+    
+    /**
+     * Get method for getting amount of flatfacilities in plain text
+     *
+     * @return returns the number of flatfacilities as String
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
