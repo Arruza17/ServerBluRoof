@@ -21,7 +21,8 @@ import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.core.MediaType;
 
 /**
- *
+ *RESTFUL Service for flat
+ * 
  * @author jorge
  */
 @Stateless
