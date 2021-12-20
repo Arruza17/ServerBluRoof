@@ -212,6 +212,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
             em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", password).executeUpdate();
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
 

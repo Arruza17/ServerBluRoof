@@ -34,6 +34,7 @@ public class Owner extends User implements Serializable {
     private List<Dwelling> dwellings;
 
     
+    @XmlTransient
     public List<Dwelling> getDwellings() {
         return dwellings;
     }

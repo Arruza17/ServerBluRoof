@@ -32,10 +32,10 @@ import org.hibernate.validator.constraints.Email;
  */
 @NamedQueries({
     @NamedQuery(
-            name = "logInUser", query = "SELECT u FROM User u WHERE u.login= :login and u.password= :password"),
+            name = "logInUser", query = "SELECT u FROM User u WHERE u.login= :login and u.password= :password")
+    ,
     @NamedQuery(
-            name = "changePassword", query = "UPDATE User u SET u.password=:newPass WHERE u.login= :login"),
-}
+            name = "changePassword", query = "UPDATE User u SET u.password=:newPass, u.lastPasswordChange = current_time() WHERE u.login= :login")}
 )
 
 @Entity
@@ -98,6 +98,7 @@ public class User implements Serializable {
     @OneToMany(cascade = ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<LastSignIn> lastSignIns;
 
+    @XmlTransient
     public List<LastSignIn> getLastSignIns() {
         return lastSignIns;
     }
