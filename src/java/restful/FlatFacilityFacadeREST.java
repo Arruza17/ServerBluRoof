@@ -107,7 +107,7 @@ public class FlatFacilityFacadeREST extends AbstractFacade<FlatFacility> {
      */
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public FlatFacility find(@PathParam("id") PathSegment id) {
         entities.FlatfacilityId key = getPrimaryKey(id);
         return super.find(key);
@@ -119,7 +119,7 @@ public class FlatFacilityFacadeREST extends AbstractFacade<FlatFacility> {
      */
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<FlatFacility> findAll() {
         return super.findAll();
     }
@@ -132,7 +132,7 @@ public class FlatFacilityFacadeREST extends AbstractFacade<FlatFacility> {
      */
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<FlatFacility> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
