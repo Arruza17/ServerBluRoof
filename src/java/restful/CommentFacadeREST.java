@@ -63,6 +63,7 @@ public class CommentFacadeREST extends AbstractFacade<Comment> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Comment entity) {
         super.create(entity);
+        em.createNamedQuery("updateRating").setParameter("dwellingId", entity.getDwelling().getId());
     }
 
     @PUT
