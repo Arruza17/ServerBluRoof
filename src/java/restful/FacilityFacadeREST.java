@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package restful;
 
 import entities.Facility;
@@ -25,25 +21,38 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
-
 /**
+ * RESTful service for Facility.
  *
- * @author 2dam
+ * @author Adrián
  */
 @Stateless
 @Path("entities.facility")
 public class FacilityFacadeREST extends AbstractFacade<Facility> {
 
+     /**
+     * Logger for this class.
+     */
     private final Logger LOGGER = Logger.getLogger(FacilityFacadeREST.class.getName());
-    
+
+     /**
+     * EJB object implementing business logic.
+     */
     @PersistenceContext(unitName = "ServerBluRoofPU")
     private EntityManager em;
 
+    /**
+     * Constructor of the ServiceFacadeREST object
+     */
     public FacilityFacadeREST() {
         super(Facility.class);
     }
 
+    /**
+     * POST method to create a facility.
+     *
+     * @param entity The new facility.
+     */
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML})
@@ -51,6 +60,12 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         super.create(entity);
     }
 
+    /**
+     * PUT method to edit a service.
+     *
+     * @param id The id of the facility.
+     * @param entity The new service that overrides the previous one.
+     */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
@@ -58,12 +73,23 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         super.edit(entity);
     }
 
+    /**
+     * DELETE method that deletes a facility.
+     *
+     * @param id The id of the facility.
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
+    /**
+     * GET method for getting a facility by its id
+     *
+     * @param id The facility id.
+     * @return A facility object
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
@@ -71,6 +97,11 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         return super.find(id);
     }
 
+    /**
+     * GET method that returns all the facility.
+     *
+     * @return all the facility.
+     */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML})
@@ -78,6 +109,13 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         return super.findAll();
     }
 
+    /**
+     * GET method that returns a list with the expecified number in range
+     *
+     * @param from the start value
+     * @param to the finish value
+     * @return the facility list
+     */
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML})
@@ -85,6 +123,11 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         return super.findRange(new int[]{from, to});
     }
 
+    /**
+     * GET method that returns the amount of all the facility.
+     *
+     * @return the number of facility as String.
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -92,26 +135,22 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
         return String.valueOf(super.count());
     }
 
+    /**
+     * Gets the entity Manager
+     *
+     * @return the entity manager
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     /**
-    @GET
-    @Path("adquisitionDate/{date}")
-    @Produces({MediaType.APPLICATION_XML})
-    public List<Facility> findByAdqDate(@PathParam("date") Date adquisitionDate) {
-        List<Facility> facilities=null;
-        try{
-            facilities=new ArrayList<>(em.createNamedQuery("findByAdqDate").setParameter("date",adquisitionDate).getResultList());
-        }catch(Exception e){
-            LOGGER.severe("FacilityEJB -> findByAdqDate()"+ e.getMessage());
-            
-        }                
-        return facilities;
-    }
-*/
+     * GET method that returns the facilities with an specific adquisition date.
+     * @param date The facility adquisition date.
+     * @return all the facilities with a specific adquisition date.
+     */
+    
     @GET
     @Path("adquisitionDate/{date}")
     @Produces({MediaType.APPLICATION_XML})
@@ -121,12 +160,17 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
             LOGGER.log(Level.INFO, "Getting the facilities by adquisition date {0}", date);
             facilities = new ArrayList<>(em.createNamedQuery("findFacilityByAdqDate").setParameter("date", date).getResultList());
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE,e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage());
             //throw new 
         }
         return facilities;
-    } 
-    
+    }
+
+    /**
+     * GET method that returns the facilities of a specific type.
+     * @param facilityType The type of facility.
+     * @return all the facilities of a specific type.
+     */
     @GET
     @Path("type/{facilityType}")
     @Produces({MediaType.APPLICATION_XML})
@@ -137,9 +181,9 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
             FacilityType type = FacilityType.valueOf(facilityType);
             facilities = new ArrayList<>(em.createNamedQuery("findFacilityByType").setParameter("facilityType", type).getResultList());
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE,e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage());
             //throw new 
         }
         return facilities;
-    } 
+    }
 }

@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 
 @NamedQueries({
-   @NamedQuery(name = "findDwelligsByNeighbourhood", query = "SELECT s FROM Service s WHERE s .type=:serviceType"),
-   @NamedQuery(name = "findServicesByNeighbourhood", query = "SELECT s FROM Service s WHERE s .type=:serviceType")
+   @NamedQuery(name = "findNeighbourhoodDwelligs", query = "SELECT d FROM Dwelling d WHERE d.neighbourhood=(Select n.id from Neighbourhood n where n.name=:neighbourhoodName)"),
+   @NamedQuery(name = "findNeighbourhoodServices", query = "SELECT s FROM Service s, Neighbourhood n WHERE s.neighbourhood=(Select n.id from Neighbourhood n where n.name=:neighbourhoodName)")
 })
 
 @Entity

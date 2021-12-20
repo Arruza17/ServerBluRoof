@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Adrián
  */
 @NamedQueries({
-      @NamedQuery(name = "findByType", query = "SELECT s FROM Service s WHERE s .type=:serviceType"),
-      @NamedQuery(name = "findByAddress", query = "SELECT s FROM Service s WHERE s.address=:address"),
-      @NamedQuery(name = "findByName", query = "SELECT s FROM Service s WHERE s.name=:name")
+      @NamedQuery(name = "findServiceByType", query = "SELECT s FROM Service s WHERE s .type=:serviceType"),
+      @NamedQuery(name = "findServiceByAddress", query = "SELECT s FROM Service s WHERE s.address=:serviceAddress"),
+      @NamedQuery(name = "findServiceByName", query = "SELECT s FROM Service s WHERE s.name=:serviceName")
 })
 
 @Entity

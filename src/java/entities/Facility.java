@@ -27,11 +27,10 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 
 @NamedQueries({
-    @NamedQuery(name = "findByAdqDate", query = "SELECT f FROM Facility f WHERE f.adquisitionDate=:adquisitionDate"),
-    @NamedQuery(name = "findByType", query = "SELECT f FROM Facility f WHERE f.type=:facilityType"),
+    @NamedQuery(name = "findFacilityByAdqDate", query = "SELECT f FROM Facility f WHERE f.adquisitionDate=:date"),
+    @NamedQuery(name = "findFacilityByType", query = "SELECT f FROM Facility f WHERE f.type=:facilityType"),
     
 })
-
 
 @Entity
 @Table(schema = "bluroof")
