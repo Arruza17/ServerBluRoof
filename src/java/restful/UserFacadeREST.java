@@ -1,8 +1,11 @@
 package restful;
 
+import entities.LastSignIn;
 import entities.User;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Date;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +37,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     /**
      * Logger for this class.
      */
-    private static final Logger LOGGER = Logger.getLogger("UserFacadeREST");
+    private static final Logger LOGGER = Logger.getLogger(UserFacadeREST.class.getName());
 
     /**
      * EJB object implementing the bussiness logic
@@ -148,12 +151,32 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
-            password = "DECIPHERED PASSWORD";
+            //  password = "DECIPHERED PASSWORD";
 
             //Hash password       
-            password = "HASHED PASSWORD";
+            // password = "HASHED PASSWORD";
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
             user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", password).getSingleResult();
+
+            //Take all the last signins of a user to the persistance context
+            //SELECT l FROM LastSignIn l WHERE l.user =(SELECT u FROM User u WHERE u.login= :login) ORDER BY l.lastSignIn ASC 
+            List<LastSignIn> lastSignIns = new ArrayList<>();
+            lastSignIns = (ArrayList) em.createNamedQuery("findByUserLogin").setParameter("user", user).getResultList();
+
+            //If they signed in less than 10 times, a new sign in is added
+            if (lastSignIns.size() < 10) {
+                LastSignIn lastSignIn = new LastSignIn();
+                lastSignIn.setId(null);
+                lastSignIn.setLastSignIn(new Date());
+                lastSignIn.setUser(user);
+                em.persist(lastSignIn);
+            } else {
+                //If they signed in more than 10 times, the sign in with the minimum date is updated
+                LastSignIn lis = lastSignIns.get(0);
+                lis.setLastSignIn(new Date());
+                em.merge(lis);
+            }
+
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
             throw new NotAuthorizedException(e);
