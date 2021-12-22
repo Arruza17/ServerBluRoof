@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,12 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Adrián
  */
+@NamedQueries({
+    @NamedQuery(name = "findNeighbourhoodDwelligs", query = "SELECT d FROM Dwelling d WHERE d.neighbourhood=(Select n.id from Neighbourhood n where n.name=:neighbourhoodName)")
+    ,
+   @NamedQuery(name = "findNeighbourhoodServices", query = "SELECT s FROM Service s, Neighbourhood n WHERE s.neighbourhood=(Select n.id from Neighbourhood n where n.name=:neighbourhoodName)")
+})
+
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement
@@ -53,7 +61,9 @@ public class Neighbourhood implements Serializable {
     /**
      * List of neighborhood services.
      */
-    @OneToMany(cascade = ALL, mappedBy = "neighbourhood",fetch = FetchType.EAGER)
+ 
+    @OneToMany(cascade = ALL, mappedBy = "neighbourhood", fetch = FetchType.EAGER)
+
     private List<Service> services;
 
     /**
