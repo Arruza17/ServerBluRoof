@@ -35,7 +35,11 @@ import org.hibernate.validator.constraints.Email;
             name = "logInUser", query = "SELECT u FROM User u WHERE u.login= :login and u.password= :password")
     ,
     @NamedQuery(
-            name = "changePassword", query = "UPDATE User u SET u.password=:newPass, u.lastPasswordChange = current_time() WHERE u.login= :login")}
+            name = "changePassword", query = "UPDATE User u SET u.password=:newPass, u.lastPasswordChange = current_time() WHERE u.login= :login"),
+     @NamedQuery(
+            name = "findByLogin", query = "SELECT u FROM User u WHERE u.login= :login")
+    ,
+}
 )
 
 @Entity

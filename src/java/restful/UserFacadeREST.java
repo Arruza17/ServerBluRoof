@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -18,12 +19,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import resources.EmailService;
 
 /**
  * RESTful service for Users.
@@ -199,19 +202,25 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void resetPassword(@PathParam("user") String login) {
         try {
             LOGGER.info("Creating new password");
+
+            //Search all the data of a user          
+            User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Generate new password
-            SecureRandom random = new SecureRandom();
-            byte bytes[] = new byte[16];
-            random.nextBytes(bytes);
-            byte array[] = random.generateSeed(16);
-            String pass = new String(array, Charset.forName("UTF-8"));
+            String pass = generateRandomPassword();
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
             em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass).executeUpdate();
+
+            EmailService es = new EmailService();
+            es.sendEmail(user.getEmail(), pass);
+
             //Hashing the password
             // password = "HASHED PASSWORD";
-            // "UPDATE User u SET u.password=:newPass WHERE u.login= :login"
+        } catch (NoResultException e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> resetPassword():{0}", e.getLocalizedMessage());
+            throw new NotFoundException(e);
+
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, "UserEJB --> resetPassword():{0}", e.getLocalizedMessage());
             //Throw new read exception
         }
     }
@@ -245,6 +254,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    private String generateRandomPassword() {
+        String uppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        String lowercase = uppercase.toLowerCase();
+        String specialChars = "1234567890!·$%&/()=?¿@#~€¬";
+        String all = uppercase + lowercase + specialChars;
+        String pass = "";
+
+        for (int i = 0; i < 16; i++) {
+            pass = pass + all.charAt(new Random().nextInt(all.length()));
+        }
+
+        return pass;
     }
 
 }
