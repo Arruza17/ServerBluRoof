@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,12 +15,15 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing dwellings. It contains the following fields: dwelling id,
@@ -31,6 +35,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Ander Arruza
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating ORDER BY d.rating DESC"
+    )
+    ,
+        @NamedQuery(
+            name = "findByMinConstructionDate", query = "SELECT d FROM Dwelling d WHERE d.constructionDate >= :date ORDER BY d.constructionDate DESC"
+    )
+    ,
+        @NamedQuery(
+            name = "updateRating", query = "UPDATE Dwelling d SET d.rating = ( SELECT SUM(c.rating)/COUNT(c.rating) FROM Comment c WHERE dwellingId=:dwellingId) WHERE id=:dwellingId")
+})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "bluroof", name = "dwelling")
@@ -64,7 +80,7 @@ public class Dwelling implements Serializable {
      * Relational field containing Neighbourhood of the dwelling
      */
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Neighbourhood neighbourhood;
     /**
      * Date in which the dwelling was made
@@ -86,7 +102,7 @@ public class Dwelling implements Serializable {
     /**
      * List of the comments made by the users about the dwelling.
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dwelling")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dwelling", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     //GETTERS AND SETTERS
@@ -199,6 +215,63 @@ public class Dwelling implements Serializable {
     }
 
     /**
+     * Returns the Neighbourhood of the dwelling
+     *
+     * @return the Neighbourhood
+     */
+    @XmlTransient
+    public Neighbourhood getNeighbourhood() {
+        return neighbourhood;
+    }
+
+    /**
+     * Sets the Neighbourhood
+     *
+     * @param neighbourhood the Neighbourhood to set
+     */
+    public void setNeighbourhood(Neighbourhood neighbourhood) {
+        this.neighbourhood = neighbourhood;
+    }
+
+    /**
+     * Returns the owner/host of the dwelling
+     *
+     * @return the owner
+     */
+    @XmlTransient
+    public Owner getHost() {
+        return host;
+    }
+
+    /**
+     * Sets the host/owner
+     *
+     * @param host the host to set
+     */
+    public void setHost(Owner host) {
+        this.host = host;
+    }
+
+    /**
+     * Returns a list of all the comments of the Dwelling made by different
+     * guests
+     *
+     * @return all the comments
+     */
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    /**
+     * Sets a list of all the comments of the Dwelling
+     *
+     * @param comments the list to set
+     */
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    /**
      * Integer representation for Dwelling instance.
      *
      * @return a hash code value for this object.
@@ -238,7 +311,7 @@ public class Dwelling implements Serializable {
      */
     @Override
     public String toString() {
-        return "Dwelling{" + "id=" + id + ", address=" + address + ", hasWiFi=" + hasWiFi + ", squareMeters=" + squareMeters + ", neighbourhood=" + neighbourhood + ", constructionDate=" + constructionDate + ", host=" + host + ", rating=" + rating + ", comments=" + comments + '}';
+        return "Dwelling{" + "id=" + id + '}';
     }
 
 }

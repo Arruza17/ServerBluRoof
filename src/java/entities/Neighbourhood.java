@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,12 +48,12 @@ public class Neighbourhood implements Serializable {
     /**
      * List of neighborhood dwellings.
      */
-      @OneToMany(cascade = ALL, mappedBy = "neighbourhood")
+    @OneToMany(cascade = ALL, mappedBy = "neighbourhood", fetch = FetchType.EAGER)
     private List<Dwelling> dwellings;
     /**
      * List of neighborhood services.
      */
-     @OneToMany(cascade = ALL, mappedBy = "neighbourhood")
+    @OneToMany(cascade = ALL, mappedBy = "neighbourhood",fetch = FetchType.EAGER)
     private List<Service> services;
 
     /**

@@ -24,7 +24,7 @@ import javax.ws.rs.core.PathSegment;
 
 /**
  *
- * @author 2dam
+ * @author Ander Arruza
  */
 @Stateless
 @Path("entities.flatfacility")
