@@ -60,6 +60,7 @@ public class Service implements Serializable {
      * Service neighborhood.
      */
 
+    @XmlTransient
     @ManyToOne
     private Neighbourhood neighbourhood;
 
