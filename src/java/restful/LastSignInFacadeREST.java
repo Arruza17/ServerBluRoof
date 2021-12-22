@@ -22,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * RESTful service for LastSignIns.
- *
  * @author Yeray Sampedro
  */
 @Stateless

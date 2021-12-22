@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -17,6 +19,13 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author jorge
  */
+
+@NamedQueries({
+    @NamedQuery(
+    name="findFlatByNofBathrooms",query="SELECT f FROM Flat f where f.nBathrooms=:nBathrooms"
+    ),
+    @NamedQuery(name="findByNofRooms", query="SELECT f FROM Flat f where f.nRooms=:nRooms")
+})
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement

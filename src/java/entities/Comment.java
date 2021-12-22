@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing comments. It contains the following fields: comment id,
@@ -41,14 +43,20 @@ public class Comment implements Serializable {
     @NotNull
     private String text;
     /**
+     * The rating of the comment [1-5]
+     */
+    private Short rating;
+    /**
      * Current time in which the comment was made
      */
     @Temporal(TemporalType.TIMESTAMP)
     private Date commentDate;
     /**
      * Relational field containing the commenter who made it
+
      */ 
-    @JoinColumn(name = "guestId", updatable = false, insertable = false)
+
+    @JoinColumn(name = "commenterId", updatable = false, insertable = false)
     @NotNull
     @ManyToOne
     private Guest commenter;
@@ -97,6 +105,24 @@ public class Comment implements Serializable {
     }
 
     /**
+     * Returns the rating
+     *
+     * @return the rating
+     */
+    public Short getRating() {
+        return rating;
+    }
+
+    /**
+     * Sets the rating
+     *
+     * @param rating the rating to get
+     */
+    public void setRating(Short rating) {
+        this.rating = rating;
+    }
+
+    /**
      * Returns the date in which the comment was made
      *
      * @return the date of the comment
@@ -137,6 +163,7 @@ public class Comment implements Serializable {
      *
      * @return the dwelling to get
      */
+    @XmlTransient
     public Dwelling getDwelling() {
         return dwelling;
     }
@@ -207,7 +234,7 @@ public class Comment implements Serializable {
      */
     @Override
     public String toString() {
-        return "entities.Comment[ id=" + id + " ]";
+        return "Comment{" + "id=" + id + '}';
     }
 
 }

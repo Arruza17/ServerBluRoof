@@ -7,14 +7,18 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing Facilities. Contains personal data, identification data
@@ -22,6 +26,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Adrián
  */
+@NamedQueries({
+    @NamedQuery(name = "findFacilityByAdqDate", query = "SELECT f FROM Facility f WHERE f.adquisitionDate=:date")
+    ,
+    @NamedQuery(name = "findFacilityByType", query = "SELECT f FROM Facility f WHERE f.type=:facilityType"),})
+
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement
@@ -50,8 +59,17 @@ public class Facility implements Serializable {
      *
      * @return the id of the facility.
      */
-    @OneToMany(cascade = ALL, mappedBy = "facility")
+    @OneToMany(cascade = ALL, mappedBy = "facility", fetch = FetchType.EAGER)
     private List<FlatFacility> flatFacilities;
+
+    @XmlTransient
+    public List<FlatFacility> getFlatFacilities() {
+        return flatFacilities;
+    }
+
+    public void setFlatFacilities(List<FlatFacility> flatFacilities) {
+        this.flatFacilities = flatFacilities;
+    }
 
     public Long getId() {
         return id;
@@ -71,6 +89,7 @@ public class Facility implements Serializable {
      */
     public FacilityType getType() {
         return type;
+
     }
 
     /**

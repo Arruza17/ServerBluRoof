@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,6 +20,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author jorge
  */
+@NamedQueries({
+    @NamedQuery(
+    name="findFlatFacilityByCondition",query="SELECT f FROM FlatFacility f where f.facilityCondition=:condition"
+    )
+})
 @Entity
 @Table(schema = "bluroof")
 @XmlRootElement
