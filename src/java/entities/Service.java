@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entity representing Services. Contains personal data, identification data and
@@ -21,8 +22,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Adrián
  */
 @NamedQueries({
-      @NamedQuery(name = "findServiceByType", query = "SELECT s FROM Service s WHERE s .type=:serviceType"),
-      @NamedQuery(name = "findServiceByAddress", query = "SELECT s FROM Service s WHERE s.address=:serviceAddress"),
+    @NamedQuery(name = "findServiceByType", query = "SELECT s FROM Service s WHERE s .type=:serviceType")
+    ,
+      @NamedQuery(name = "findServiceByAddress", query = "SELECT s FROM Service s WHERE s.address=:serviceAddress")
+    ,
       @NamedQuery(name = "findServiceByName", query = "SELECT s FROM Service s WHERE s.name=:serviceName")
 })
 
@@ -56,6 +59,7 @@ public class Service implements Serializable {
     /**
      * Service neighborhood.
      */
+
     @ManyToOne
     private Neighbourhood neighbourhood;
 
@@ -127,6 +131,7 @@ public class Service implements Serializable {
      *
      * @return the neighborhood of the service.
      */
+    @XmlTransient
     public Neighbourhood getNeighborhood() {
         return neighbourhood;
     }
