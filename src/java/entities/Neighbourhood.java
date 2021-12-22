@@ -61,7 +61,9 @@ public class Neighbourhood implements Serializable {
     /**
      * List of neighborhood services.
      */
+ 
     @OneToMany(cascade = ALL, mappedBy = "neighbourhood", fetch = FetchType.EAGER)
+
     private List<Service> services;
 
     /**
