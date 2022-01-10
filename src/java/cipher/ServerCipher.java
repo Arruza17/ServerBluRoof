@@ -3,6 +3,7 @@ package cipher;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
@@ -15,6 +16,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -36,26 +39,31 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class ServerCipher {
 
-    private static String route = "java/resources/Server.key";
     private static byte[] salt = "this is the salt".getBytes();
     private static String key = "key";
     private static byte[] privateKey;
 
     public ServerCipher() {
         try {
-            privateKey = Files.readAllBytes(Paths.get("Private.key"));
+            InputStream is = getClass().getResourceAsStream("Private.key");
+            byte[] fileContent = new byte[is.available()];
+            is.read(fileContent, 0, is.available());
+            privateKey = fileContent;
         } catch (IOException ex) {
             Logger.getLogger(ServerCipher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static String decipherServerData() {
+    public String decipherServerData() {
         String ret = null;
         // Fichero leído
-        byte[] fileContent = fileReader(route); // Path del fichero Server.key
+        InputStream is = getClass().getResourceAsStream("Server.key");
+
         KeySpec keySpec = null;
         SecretKeyFactory secretKeyFactory = null;
         try {
+            byte[] fileContent = new byte[is.available()];;
+            is.read(fileContent, 0, is.available());
             // Obtenemos el keySpec
             keySpec = new PBEKeySpec(key.toCharArray(), salt, 65536, 128); // AES-128
             // Obtenemos una instancide de SecretKeyFactory con el algoritmo "PBKDF2WithHmacSHA1"
@@ -77,12 +85,14 @@ public class ServerCipher {
 
         } catch (InvalidAlgorithmParameterException | InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             Logger.getLogger(ServerCipher.class.getName()).log(Level.SEVERE, null, e);
+        } catch (IOException ex) {
+            Logger.getLogger(ServerCipher.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
 
     }
 
-    public static byte[] cipherServerData(String msgToCipher) {
+    public byte[] cipherServerData(String msgToCipher) {
         String ret = null;
         KeySpec keySpec = null;
         SecretKeyFactory secretKeyFactory = null;
@@ -107,7 +117,7 @@ public class ServerCipher {
             // Guardamos el mensaje codificado: IV (16 bytes) + Mensaje
             byte[] combined = concatArrays(iv, encodedMessage);
             // Escribimos el fichero cifrado 
-            fileWriter(route, combined);
+            fileWriter("/java/cipher/Server.key", combined);
             // Retornamos el texto cifrado
             ret = new String(encodedMessage);
 
@@ -123,7 +133,7 @@ public class ServerCipher {
      * @param msg the message to be hashed
      * @return ret the ciphered message
      */
-    public static String hash(byte[] msg) {
+    public String hash(byte[] msg) {
         String ret = null;
         MessageDigest messageDigest;
         try {
@@ -145,7 +155,7 @@ public class ServerCipher {
      * @param cipheredMsg the message ciphered
      * @return msg the message deciphered
      */
-    public static String decipherClientPetition(String cipheredMsg) {
+    public String decipherClientPetition(String cipheredMsg) {
         //Pasa de hexadecimal a string, con el mensaje cifrado real
         byte[] codedMsg = byteArray(cipheredMsg);
         String msg = null;
@@ -168,7 +178,7 @@ public class ServerCipher {
         return msg;
     }
 
-    private static String hexadecimal(byte[] resumen) {
+    private String hexadecimal(byte[] resumen) {
         String HEX = "";
         for (int i = 0; i < resumen.length; i++) {
             String h = Integer.toHexString(resumen[i] & 0xFF);
@@ -180,7 +190,7 @@ public class ServerCipher {
         return HEX.toUpperCase();
     }
 
-    private static byte[] byteArray(String hex) {
+    private byte[] byteArray(String hex) {
         String result = new String();
         char[] charArray = hex.toCharArray();
         for (int i = 0; i < charArray.length; i = i + 2) {
@@ -191,14 +201,14 @@ public class ServerCipher {
         return result.getBytes();
     }
 
-    private static byte[] concatArrays(byte[] array1, byte[] array2) {
+    private byte[] concatArrays(byte[] array1, byte[] array2) {
         byte[] ret = new byte[array1.length + array2.length];
         System.arraycopy(array1, 0, ret, 0, array1.length);
         System.arraycopy(array2, 0, ret, array1.length, array2.length);
         return ret;
     }
 
-    private static void fileWriter(String path, byte[] text) {
+    private void fileWriter(String path, byte[] text) {
         try (FileOutputStream fos = new FileOutputStream(path)) {
             fos.write(text);
         } catch (IOException e) {
@@ -212,7 +222,7 @@ public class ServerCipher {
         try {
             ret = Files.readAllBytes(file.toPath());
         } catch (IOException e) {
-            Logger.getLogger(ServerCipher.class.getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
         }
         return ret;
     }

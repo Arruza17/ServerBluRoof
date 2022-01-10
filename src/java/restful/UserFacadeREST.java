@@ -38,6 +38,8 @@ import resources.EmailService;
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
+    private ServerCipher serverCipher= new ServerCipher();
+    
     /**
      * Logger for this class.
      */
@@ -155,9 +157,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
-            String decipheredPassword = ServerCipher.decipherClientPetition(password);
+            String decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            String hashedPassword = ServerCipher.hash(decipheredPassword.getBytes());
+            String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
             user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
             //Take all the last signins of a user to the persistance context
@@ -201,14 +203,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void resetPassword(@PathParam("user") String login) {
         try {
             LOGGER.info("Creating new password");
-
             //Search all the data of a user          
             User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Generate new password
             String pass = generateRandomPassword();
+            //Hash password
+            String hasshedPass = serverCipher.hash(pass.getBytes());
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
-            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass).executeUpdate();
-
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hasshedPass).executeUpdate();
+            //Sending email with new password
             EmailService es = new EmailService();
             es.sendEmail(user.getEmail(), pass);
 
@@ -237,15 +240,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Updating password");
             //Decipher pasword
-            //password = "DECIPHERED PASSWORD";
+            String decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            // password = "HASHED PASSWORD";
-
+            String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
-            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", password).executeUpdate();
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hashedPassword).executeUpdate();
 
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
 
         }
     }

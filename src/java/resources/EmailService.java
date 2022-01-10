@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -41,11 +42,11 @@ public class EmailService {
      *
      */
     private static String password;
-    
+
     public EmailService() {
         configFile = ResourceBundle.getBundle("resources.mail");
     }
-    
+
     public void sendEmail(String email, String message) {
 
         // Recipient's email ID needs to be mentioned.
@@ -53,7 +54,7 @@ public class EmailService {
 
         // Sender's email ID needs to be mentioned
         from = configFile.getString("MAIL");
-        password =ServerCipher.decipherServerData();
+        password = new ServerCipher().decipherServerData();
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";
@@ -69,18 +70,18 @@ public class EmailService {
 
         // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            
+
             protected PasswordAuthentication getPasswordAuthentication() {
-                
+
                 return new PasswordAuthentication(from, password);
-                
+
             }
-            
+
         });
 
         // Used to debug SMTP issues
         session.setDebug(true);
-        
+
         try {
             // Create a default MimeMessage object.
             MimeMessage sendMsg = new MimeMessage(session);
@@ -96,7 +97,7 @@ public class EmailService {
 
             // Now set the actual message
             StringBuilder contentBuilder = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\2dam\\Documents\\NetBeansProjects\\ServerBluRoof\\src\\java\\resources\\EmailBody.html"));
+            BufferedReader in = new BufferedReader(new FileReader(getClass().getResource("EmailBody.html").getPath()));
             String str;
             while ((str = in.readLine()) != null) {
                 contentBuilder.append(str);
@@ -105,17 +106,17 @@ public class EmailService {
             String content = contentBuilder.toString();
             content = content.replace("THISISYOURPASSWORD", message);
             sendMsg.setText(content, "utf-8", "html");
-          
+
             LOGGER.info("Sending email");
             // Send message
             Transport.send(sendMsg);
-            
+
         } catch (MessagingException mex) {
             mex.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
 }
