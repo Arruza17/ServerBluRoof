@@ -1,5 +1,6 @@
 package resources;
 
+import cipher.ServerCipher;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -52,7 +53,7 @@ public class EmailService {
 
         // Sender's email ID needs to be mentioned
         from = configFile.getString("MAIL");
-        password = configFile.getString("PASSWORD");
+        password =ServerCipher.decipherServerData();
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";

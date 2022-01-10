@@ -1,5 +1,6 @@
 package restful;
 
+import cipher.ServerCipher;
 import entities.LastSignIn;
 import entities.User;
 import java.nio.charset.Charset;
@@ -154,13 +155,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
-            //  password = "DECIPHERED PASSWORD";
-
+            String decipheredPassword = ServerCipher.decipherClientPetition(password);
             //Hash password       
-            // password = "HASHED PASSWORD";
+            String hashedPassword = ServerCipher.hash(decipheredPassword.getBytes());
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
-            user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", password).getSingleResult();
-
+            user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
             //Take all the last signins of a user to the persistance context
             //SELECT l FROM LastSignIn l WHERE l.user =(SELECT u FROM User u WHERE u.login= :login) ORDER BY l.lastSignIn ASC 
             List<LastSignIn> lastSignIns = new ArrayList<>();
