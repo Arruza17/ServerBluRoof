@@ -1,6 +1,5 @@
 package restful;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import entities.FlatFacility;
 import entities.FlatfacilityId;
 import java.util.ArrayList;
