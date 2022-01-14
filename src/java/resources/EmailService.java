@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -47,7 +48,7 @@ public class EmailService {
         configFile = ResourceBundle.getBundle("resources.mail");
     }
 
-    public void sendEmail(String email, String message) {
+    public void sendEmail(String email, String message) throws Exception {
 
         // Recipient's email ID needs to be mentioned.
         String to = email;
@@ -93,28 +94,39 @@ public class EmailService {
             sendMsg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            sendMsg.setSubject("This is the Subject Line!");
+            sendMsg.setSubject("BluRoof password changed!!");
 
             // Now set the actual message
             StringBuilder contentBuilder = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader(getClass().getResource("EmailBody.html").getPath()));
+
+            String route;
+            if (message.length() == 16) {
+                route = "EmailReset.html";
+            } else {
+                route = "EmailChange.html";
+            }
+
+            BufferedReader in = new BufferedReader(new FileReader(getClass().getResource(route).getPath()));
             String str;
+
             while ((str = in.readLine()) != null) {
                 contentBuilder.append(str);
             }
             in.close();
-            String content = contentBuilder.toString();
-            content = content.replace("THISISYOURPASSWORD", message);
+            String content = contentBuilder.toString().trim();
+            if (message.length() == 16) {
+                content = content.replace("THISISYOURPASSWORD", message);
+            }
             sendMsg.setText(content, "utf-8", "html");
 
             LOGGER.info("Sending email");
             // Send message
             Transport.send(sendMsg);
 
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
+        } catch (MessagingException ex) {
+            throw new Exception(ex);
         } catch (IOException ex) {
-            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex);
         }
 
     }

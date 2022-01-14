@@ -40,7 +40,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class ServerCipher {
 
     private static byte[] salt = "this is the salt".getBytes();
-    private static String key = "key";
+    private static String key;
     private static byte[] privateKey;
 
     public ServerCipher() {
@@ -49,6 +49,8 @@ public class ServerCipher {
             byte[] fileContent = new byte[is.available()];
             is.read(fileContent, 0, is.available());
             privateKey = fileContent;
+            
+            key = ResourceBundle.getBundle("cipher.cipher").getString("KEY");
         } catch (IOException ex) {
             Logger.getLogger(ServerCipher.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,11 +60,12 @@ public class ServerCipher {
         String ret = null;
         // Fichero leído
         InputStream is = getClass().getResourceAsStream("Server.key");
-
         KeySpec keySpec = null;
         SecretKeyFactory secretKeyFactory = null;
         try {
-            byte[] fileContent = new byte[is.available()];;
+            //Creamos un array con la longitud de los datos del fichero
+            byte[] fileContent = new byte[is.available()];
+            //Leemos el fichero y nos lo guardamos en la variable inicial
             is.read(fileContent, 0, is.available());
             // Obtenemos el keySpec
             keySpec = new PBEKeySpec(key.toCharArray(), salt, 65536, 128); // AES-128

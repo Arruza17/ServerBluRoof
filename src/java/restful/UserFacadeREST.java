@@ -38,8 +38,8 @@ import resources.EmailService;
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
-    private ServerCipher serverCipher= new ServerCipher();
-    
+    private ServerCipher serverCipher = new ServerCipher();
+
     /**
      * Logger for this class.
      */
@@ -213,6 +213,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hasshedPass).executeUpdate();
             //Sending email with new password
             EmailService es = new EmailService();
+            //Type 1 because of reset
             es.sendEmail(user.getEmail(), pass);
 
             //Hashing the password
@@ -239,13 +240,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void changePassword(@PathParam("user") String login, @PathParam("pass") String password) {
         try {
             LOGGER.info("Updating password");
+            //Search all the data of a user          
+            User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Decipher pasword
-            String decipheredPassword = serverCipher.decipherClientPetition(password);
+            //String decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
+            //String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
+            String hashedPassword = serverCipher.hash(password.getBytes());
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
             em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hashedPassword).executeUpdate();
+            //Sending email with new password
+            EmailService es = new EmailService();
+            //Type 2 because of change
+            es.sendEmail(user.getEmail(), "change");
 
+        } catch (NoResultException e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
+            throw new NotFoundException(e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
 
