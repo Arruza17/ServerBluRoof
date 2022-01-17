@@ -54,8 +54,9 @@ public class EmailService {
         String to = email;
 
         // Sender's email ID needs to be mentioned
-        from = configFile.getString("MAIL");
-        password = new ServerCipher().decipherServerData();
+        String data = new ServerCipher().decipherServerData();
+        from = data.substring(0, data.indexOf(' '));
+        password = data.substring(data.indexOf(' ')+1, data.length());
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";

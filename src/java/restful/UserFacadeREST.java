@@ -64,6 +64,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
+        entity.setPassword(serverCipher.hash(entity.getPassword().getBytes()));
         super.create(entity);
     }
 

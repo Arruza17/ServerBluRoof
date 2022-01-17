@@ -101,6 +101,7 @@ public class ServerCipher {
         SecretKeyFactory secretKeyFactory = null;
         Cipher cipher;
         try {
+ 
             // Obtenemos el keySpec
             keySpec = new PBEKeySpec(key.toCharArray(), salt, 65536, 128); // AES-128
             // Obtenemos una instancia del SecretKeyFactory con el algoritmo "PBKDF2WithHmacSHA1"
@@ -120,7 +121,8 @@ public class ServerCipher {
             // Guardamos el mensaje codificado: IV (16 bytes) + Mensaje
             byte[] combined = concatArrays(iv, encodedMessage);
             // Escribimos el fichero cifrado 
-            fileWriter("/java/cipher/Server.key", combined);
+         
+            fileWriter("java/cipher/Server.key", combined);
             // Retornamos el texto cifrado
             ret = new String(encodedMessage);
 
