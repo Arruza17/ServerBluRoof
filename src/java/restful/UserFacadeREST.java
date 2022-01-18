@@ -251,6 +251,44 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
 
+    @GET
+    @Path("admin")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<User> findAllAdmins() {
+        List<User> admins = null;
+        try {
+            LOGGER.info("Searching for all the admins");
+            // SELECT u FROM User u WHERE u.privilege=ADMIN
+            admins = em.createNamedQuery("findAllAdmins").getResultList();
+        } catch (NoResultException e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdmins():{0}", e.getLocalizedMessage());
+            throw new NotFoundException(e);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdmins():{0}", e.getLocalizedMessage());
+
+        }
+        return admins;
+    }
+
+    @GET
+    @Path("admin/{login}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<User> findAllAdminsByLogin(@PathParam("login") String login) {
+        List<User> admins = null;
+        try {
+            LOGGER.info("Searching for all the admins that contain " + login);
+            // SELECT u FROM User u WHERE u.privilege=ADMIN
+            admins = em.createNamedQuery("findAllAdminsByLogin").setParameter("login", "%" + login + "%").getResultList();
+        } catch (NoResultException e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
+            throw new NotFoundException(e);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
+
+        }
+        return admins;
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -269,5 +307,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         return pass;
     }
+    
+    
+    
 
 }
