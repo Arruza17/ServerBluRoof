@@ -1,5 +1,6 @@
 package restful;
 
+import cipher.ServerCipher;
 import entities.LastSignIn;
 import entities.User;
 import java.nio.charset.Charset;
@@ -37,6 +38,8 @@ import resources.EmailService;
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
+    private ServerCipher serverCipher = new ServerCipher();
+
     /**
      * Logger for this class.
      */
@@ -61,6 +64,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
+        entity.setPassword(serverCipher.hash(entity.getPassword().getBytes()));
         super.create(entity);
     }
 
@@ -154,13 +158,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
-            //  password = "DECIPHERED PASSWORD";
-
+            String decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            // password = "HASHED PASSWORD";
+            String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
-            user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", password).getSingleResult();
-
+            user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
             //Take all the last signins of a user to the persistance context
             //SELECT l FROM LastSignIn l WHERE l.user =(SELECT u FROM User u WHERE u.login= :login) ORDER BY l.lastSignIn ASC 
             List<LastSignIn> lastSignIns = new ArrayList<>();
@@ -202,15 +204,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void resetPassword(@PathParam("user") String login) {
         try {
             LOGGER.info("Creating new password");
-
             //Search all the data of a user          
             User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Generate new password
             String pass = generateRandomPassword();
+            //Hash password
+            String hasshedPass = serverCipher.hash(pass.getBytes());
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
-            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", pass).executeUpdate();
-
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hasshedPass).executeUpdate();
+            //Sending email with new password
             EmailService es = new EmailService();
+            //Type 1 because of reset
             es.sendEmail(user.getEmail(), pass);
 
             //Hashing the password
@@ -237,16 +241,25 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void changePassword(@PathParam("user") String login, @PathParam("pass") String password) {
         try {
             LOGGER.info("Updating password");
+            //Search all the data of a user          
+            User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Decipher pasword
-            //password = "DECIPHERED PASSWORD";
+            //String decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            // password = "HASHED PASSWORD";
-
+            //String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
+            String hashedPassword = serverCipher.hash(password.getBytes());
             // "UPDATE User u SET u.password=:newPass WHERE u.login= :login")
-            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", password).executeUpdate();
+            em.createNamedQuery("changePassword").setParameter("login", login).setParameter("newPass", hashedPassword).executeUpdate();
+            //Sending email with new password
+            EmailService es = new EmailService();
+            //Type 2 because of change
+            es.sendEmail(user.getEmail(), "change");
 
+        } catch (NoResultException e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
+            throw new NotFoundException(e);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
 
         }
     }

@@ -1,9 +1,12 @@
 package resources;
 
+import cipher.ServerCipher;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -40,19 +43,20 @@ public class EmailService {
      *
      */
     private static String password;
-    
+
     public EmailService() {
         configFile = ResourceBundle.getBundle("resources.mail");
     }
-    
-    public void sendEmail(String email, String message) {
+
+    public void sendEmail(String email, String message) throws Exception {
 
         // Recipient's email ID needs to be mentioned.
         String to = email;
 
         // Sender's email ID needs to be mentioned
-        from = configFile.getString("MAIL");
-        password = configFile.getString("PASSWORD");
+        String data = new ServerCipher().decipherServerData();
+        from = data.substring(0, data.indexOf(' '));
+        password = data.substring(data.indexOf(' ')+1, data.length());
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";
@@ -68,18 +72,18 @@ public class EmailService {
 
         // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            
+
             protected PasswordAuthentication getPasswordAuthentication() {
-                
+
                 return new PasswordAuthentication(from, password);
-                
+
             }
-            
+
         });
 
         // Used to debug SMTP issues
         session.setDebug(true);
-        
+
         try {
             // Create a default MimeMessage object.
             MimeMessage sendMsg = new MimeMessage(session);
@@ -91,30 +95,41 @@ public class EmailService {
             sendMsg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            sendMsg.setSubject("This is the Subject Line!");
+            sendMsg.setSubject("BluRoof password changed!!");
 
             // Now set the actual message
             StringBuilder contentBuilder = new StringBuilder();
-            BufferedReader in = new BufferedReader(new FileReader("C:\\Users\\2dam\\Documents\\NetBeansProjects\\ServerBluRoof\\src\\java\\resources\\EmailBody.html"));
+
+            String route;
+            if (message.length() == 16) {
+                route = "EmailReset.html";
+            } else {
+                route = "EmailChange.html";
+            }
+
+            BufferedReader in = new BufferedReader(new FileReader(getClass().getResource(route).getPath()));
             String str;
+
             while ((str = in.readLine()) != null) {
                 contentBuilder.append(str);
             }
             in.close();
-            String content = contentBuilder.toString();
-            content = content.replace("THISISYOURPASSWORD", message);
+            String content = contentBuilder.toString().trim();
+            if (message.length() == 16) {
+                content = content.replace("THISISYOURPASSWORD", message);
+            }
             sendMsg.setText(content, "utf-8", "html");
-          
+
             LOGGER.info("Sending email");
             // Send message
             Transport.send(sendMsg);
-            
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
+
+        } catch (MessagingException ex) {
+            throw new Exception(ex);
         } catch (IOException ex) {
-            Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex);
         }
-        
+
     }
-    
+
 }
