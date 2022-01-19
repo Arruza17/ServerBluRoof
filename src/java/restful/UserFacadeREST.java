@@ -159,9 +159,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
-            String decipheredPassword = serverCipher.decipherClientPetition(password);
-            //Hash password       
-            String hashedPassword = serverCipher.hash(decipheredPassword.getBytes());
+            byte[] decipheredPassword = serverCipher.decipherClientPetition(password);
+            String mypass= new String(decipheredPassword);
+            //Hash password      
+
+            String hashedPassword = serverCipher.hash(mypass.getBytes());
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
             user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
             //Take all the last signins of a user to the persistance context
@@ -247,9 +249,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             //Search all the data of a user          
             User user = (User) em.createNamedQuery("findByLogin").setParameter("login", login).getSingleResult();
             //Decipher pasword
-            String decipheredPassword = serverCipher.decipherClientPetition(password);
+            byte[] decipheredPassword = serverCipher.decipherClientPetition(password);
             //Hash password       
-            String hashedPass = serverCipher.hash(decipheredPassword.getBytes());
+            String hashedPass = serverCipher.hash(decipheredPassword);
             user.setPassword(hashedPass);
             em.merge(user);
             //Sending email with new password
@@ -312,7 +314,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private String generateRandomPassword() {
         String uppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
         String lowercase = uppercase.toLowerCase();
-        String specialChars = "1234567890!·$%&/()=?¿@#~€¬";
+        String specialChars = "1234567890!$%&/()=?¿@#€";
         String all = uppercase + lowercase + specialChars;
         String pass = "";
 
