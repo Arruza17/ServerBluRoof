@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.validator.constraints.Email;
@@ -35,10 +34,17 @@ import org.hibernate.validator.constraints.Email;
             name = "logInUser", query = "SELECT u FROM User u WHERE u.login= :login and u.password= :password")
     ,
     @NamedQuery(
-            name = "changePassword", query = "UPDATE User u SET u.password=:newPass, u.lastPasswordChange = current_time() WHERE u.login= :login"),
+            name = "changePassword", query = "UPDATE User u SET u.password=:newPass, u.lastPasswordChange = current_time() WHERE u.login= :login")
+    ,
      @NamedQuery(
             name = "findByLogin", query = "SELECT u FROM User u WHERE u.login= :login")
     ,
+      @NamedQuery(
+            name = "findAllAdmins", query = "SELECT u FROM User u WHERE u.privilege= 'ADMIN'")
+    ,
+       @NamedQuery(
+            name = "findAllAdminsByLogin", query = "SELECT u FROM User u WHERE u.login like :login and u.privilege= 'ADMIN'")
+
 }
 )
 
