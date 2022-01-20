@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @NamedQueries({
     @NamedQuery(
-            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating ORDER BY d.rating DESC"
+            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rate ORDER BY d.rating DESC"
     )
     ,
         @NamedQuery(
