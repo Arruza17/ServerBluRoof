@@ -3,6 +3,8 @@ package restful;
 import cipher.ServerCipher;
 import entities.LastSignIn;
 import entities.User;
+import entities.UserPrivilege;
+import entities.UserStatus;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -155,17 +157,31 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("login/{login}/password/{password}")
     @Produces({MediaType.APPLICATION_XML})
     public User logInUser(@PathParam("login") String login, @PathParam("password") String password) {
-        User user = null;
+
+        User retUser = null;
         try {
             LOGGER.info("Getting the login information");
             //Decipher pasword
             byte[] decipheredPassword = serverCipher.decipherClientPetition(password);
-            String mypass= new String(decipheredPassword);
+            String mypass = new String(decipheredPassword);
             //Hash password      
 
             String hashedPassword = serverCipher.hash(mypass.getBytes());
             //"SELECT u FROM user u WHERE u.login=:user and u.password=:password" 
-            user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
+            User user = (User) em.createNamedQuery("logInUser").setParameter("login", login).setParameter("password", hashedPassword).getSingleResult();
+            retUser = new User();
+            retUser.setBirthDate(user.getBirthDate());
+            retUser.setEmail(user.getEmail());
+            retUser.setFullName(user.getFullName());
+            retUser.setId(user.getId());
+            retUser.setLastPasswordChange(user.getLastPasswordChange());
+            retUser.setLastSignIns(user.getLastSignIns());
+            retUser.setLogin(user.getLogin());
+            retUser.setPassword(user.getPassword());
+            retUser.setPhoneNumber(user.getPhoneNumber());
+            retUser.setPrivilege(user.getPrivilege());
+            retUser.setStatus(user.getStatus());
+
             //Take all the last signins of a user to the persistance context
             //SELECT l FROM LastSignIn l WHERE l.user =(SELECT u FROM User u WHERE u.login= :login) ORDER BY l.lastSignIn ASC 
             List<LastSignIn> lastSignIns = new ArrayList<>();
@@ -193,7 +209,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
             //Throw new read exception
         }
-        return user;
+        return retUser;
     }
 
     /**
