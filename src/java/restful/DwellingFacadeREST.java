@@ -163,8 +163,17 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @Produces({MediaType.APPLICATION_XML})
     public List<Dwelling> findByMinConstructionDate(@PathParam("date") String date) {
         List<Dwelling> dwellings = null;
-        LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date); //throw new
-        dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate").setParameter("date", date).getResultList());
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateParsed = simpleDateFormat.parse(date);
+            date = simpleDateFormat.format(dateParsed);
+            LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date); //throw new
+            dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate")
+                    .setParameter("date", dateParsed).getResultList());
+
+        } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(DwellingFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return dwellings;
     }
 
