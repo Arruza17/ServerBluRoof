@@ -187,8 +187,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
-            throw new NotAuthorizedException(e);
-
+            throw new NotAuthorizedException(e);    
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
             //Throw new read exception
@@ -314,7 +313,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private String generateRandomPassword() {
         String uppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
         String lowercase = uppercase.toLowerCase();
-        String specialChars = "1234567890!$%&/()=?¿@#€";
+        String specialChars = "1234567890!/()=?@#€";
         String all = uppercase + lowercase + specialChars;
         String pass = "";
 
