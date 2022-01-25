@@ -79,7 +79,6 @@ public class Dwelling implements Serializable {
     /**
      * Relational field containing Neighbourhood of the dwelling
      */
-    @NotNull
     @ManyToOne
     private Neighbourhood neighbourhood;
     /**

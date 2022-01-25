@@ -60,6 +60,7 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Dwelling entity) {
         LOGGER.info("Creating entity dwelling");
+        entity.setId(null);
         super.create(entity);
     }
 
