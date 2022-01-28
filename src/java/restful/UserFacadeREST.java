@@ -73,10 +73,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             entity.setPassword(serverCipher.hash("TEST".getBytes()));
             entity.setId(null);
             super.create(entity);
-
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
-            throw new ConflictException();
+           throw new ConflictException();
+           
         }
     }
 
