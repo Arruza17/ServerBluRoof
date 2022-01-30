@@ -57,6 +57,7 @@ public class ServiceFacadeREST extends AbstractFacade<Service> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Service entity) {
+        entity.setId(null);
         super.create(entity);
     }
 
@@ -179,7 +180,7 @@ public class ServiceFacadeREST extends AbstractFacade<Service> {
     public List<Service> findServiceByAddress(@PathParam("serviceAddress") String serviceAddress) {
         List<Service> services = null;
         try {
-            LOGGER.log(Level.INFO, "Getting the Services by type {0}", serviceAddress);
+            LOGGER.log(Level.INFO, "Getting the Services by address {0}", serviceAddress);
 
             services = new ArrayList<>(em.createNamedQuery("findServiceByAddress").setParameter("serviceAddress", serviceAddress).getResultList());
         } catch (Exception e) {
