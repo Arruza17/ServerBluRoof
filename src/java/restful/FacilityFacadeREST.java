@@ -3,6 +3,7 @@ package restful;
 
 import entities.Facility;
 import entities.FacilityType;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,7 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Facility entity) {
+        entity.setId(null);
         super.create(entity);
     }
 
@@ -154,11 +156,14 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
     @GET
     @Path("adquisitionDate/{date}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<Facility> findFacilityByAdqDate(@PathParam("date") Date date) {
+    public List<Facility> findFacilityByAdqDate(@PathParam("date") String date) {
         List<Facility> facilities = null;
         try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateParsed = simpleDateFormat.parse(date);
+            date = simpleDateFormat.format(dateParsed);
             LOGGER.log(Level.INFO, "Getting the facilities by adquisition date {0}", date);
-            facilities = new ArrayList<>(em.createNamedQuery("findFacilityByAdqDate").setParameter("date", date).getResultList());
+            facilities = new ArrayList<>(em.createNamedQuery("findFacilityByAdqDate").setParameter("date", dateParsed).getResultList());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
             //throw new 
