@@ -57,6 +57,7 @@ public class ServiceFacadeREST extends AbstractFacade<Service> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Service entity) {
+        entity.setId(null);
         super.create(entity);
     }
 

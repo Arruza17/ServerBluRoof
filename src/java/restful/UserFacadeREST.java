@@ -3,6 +3,7 @@ package restful;
 import cipher.ServerCipher;
 import entities.LastSignIn;
 import entities.User;
+import exceptions.ConflictException;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -13,10 +14,13 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -65,8 +69,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
-        entity.setPassword(serverCipher.hash(entity.getPassword().getBytes()));
-        super.create(entity);
+        try {
+            entity.setPassword(serverCipher.hash("TEST".getBytes()));
+            entity.setId(null);
+            super.create(entity);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
+           throw new ConflictException();
+           
+        }
     }
 
     /**
@@ -78,7 +89,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Long id, User entity) {
+    public void edit(@PathParam("id") Long id, User entity
+    ) {
         super.edit(entity);
     }
 
@@ -89,7 +101,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
      */
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
+    public void remove(@PathParam("id") Long id
+    ) {
         super.remove(super.find(id));
     }
 
@@ -102,7 +115,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    public User find(@PathParam("id") Long id) {
+    public User find(@PathParam("id") Long id
+    ) {
         return super.find(id);
     }
 
@@ -128,7 +142,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<User> findRange(@PathParam("from") Integer from,
+            @PathParam("to") Integer to
+    ) {
         return super.findRange(new int[]{from, to});
     }
 
@@ -154,7 +170,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("login/{login}/password/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public User logInUser(@PathParam("login") String login, @PathParam("password") String password) {
+    public User logInUser(@PathParam("login") String login,
+            @PathParam("password") String password
+    ) {
 
         User retUser = null;
         try {
@@ -218,7 +236,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("reset/{user}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void resetPassword(@PathParam("user") String login) {
+    public void resetPassword(@PathParam("user") String login
+    ) {
         try {
             LOGGER.info("Creating new password");
             //Search all the data of a user          
@@ -257,7 +276,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("update/{user}/password/{pass}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void changePassword(@PathParam("user") String login, @PathParam("pass") String password) {
+    public void changePassword(@PathParam("user") String login,
+            @PathParam("pass") String password
+    ) {
         try {
             LOGGER.info("Updating password");
             //Search all the data of a user          
@@ -304,7 +325,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("admin/{login}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<User> findAllAdminsByLogin(@PathParam("login") String login) {
+    public List<User> findAllAdminsByLogin(@PathParam("login") String login
+    ) {
         List<User> admins = null;
         try {
             LOGGER.info("Searching for all the admins that contain " + login);
