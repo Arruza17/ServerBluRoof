@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @NamedQueries({
     @NamedQuery(
-            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rating ORDER BY d.rating DESC"
+            name = "findByMinRating", query = "SELECT d FROM Dwelling d WHERE d.rating >= :rate ORDER BY d.rating DESC"
     )
     ,
         @NamedQuery(
@@ -79,8 +79,7 @@ public class Dwelling implements Serializable {
     /**
      * Relational field containing Neighbourhood of the dwelling
      */
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Neighbourhood neighbourhood;
     /**
      * Date in which the dwelling was made
@@ -91,7 +90,7 @@ public class Dwelling implements Serializable {
      * Relational field containing the host of the dwelling
      */
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Owner host;
     /**
      * Rating of the dwelling. It is set the 0 when a new dwelling is created.

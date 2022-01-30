@@ -2,9 +2,13 @@ package restful;
 
 import com.sun.istack.logging.Logger;
 import entities.Dwelling;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -56,6 +60,7 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Dwelling entity) {
         LOGGER.info("Creating entity dwelling");
+        entity.setId(null);
         super.create(entity);
     }
 
@@ -135,11 +140,11 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @GET
     @Path("minRate/{rate}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<Dwelling> findByMinRating(@PathParam("rate") Short rate) {
+    public List<Dwelling> findByMinRating(@PathParam("rate") String rate) {
         List<Dwelling> dwellings = null;
         try {
             LOGGER.log(Level.INFO, "Getting the dwellings by min Rating {0}", rate);
-            dwellings = new ArrayList<>(em.createNamedQuery("findByMinRating").setParameter("rate", rate).getResultList());
+            dwellings = new ArrayList<>(em.createNamedQuery("findByMinRating").setParameter("rate", Float.valueOf(rate)).getResultList());
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             //throw new 
@@ -157,14 +162,18 @@ public class DwellingFacadeREST extends AbstractFacade<Dwelling> {
     @GET
     @Path("minConstructionDate/{date}")
     @Produces({MediaType.APPLICATION_XML})
-    public List<Dwelling> findByMinConstructionDate(@PathParam("date") Date date) {
+    public List<Dwelling> findByMinConstructionDate(@PathParam("date") String date) {
         List<Dwelling> dwellings = null;
         try {
-            LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date);
-            dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate").setParameter("date", date).getResultList());
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage());
-            //throw new 
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateParsed = simpleDateFormat.parse(date);
+            date = simpleDateFormat.format(dateParsed);
+            LOGGER.log(Level.INFO, "Getting the dwellings by min ConstructionDate {0}", date); //throw new
+            dwellings = new ArrayList<>(em.createNamedQuery("findByMinConstructionDate")
+                    .setParameter("date", dateParsed).getResultList());
+
+        } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(DwellingFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dwellings;
     }
