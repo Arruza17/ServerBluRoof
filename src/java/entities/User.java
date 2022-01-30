@@ -324,6 +324,9 @@ public class User implements Serializable {
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
+        if (this.email.equals(other.getEmail()) || this.login.equals(other.getLogin())) {
+            return true;
+        }
         return true;
     }
 

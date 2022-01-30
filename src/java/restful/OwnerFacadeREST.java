@@ -1,6 +1,8 @@
 package restful;
 
 import entities.Owner;
+import entities.UserPrivilege;
+import exceptions.ConflictException;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.List;
@@ -53,7 +55,15 @@ public class OwnerFacadeREST extends AbstractFacade<Owner> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Owner entity) {
-        super.create(entity);
+          try {
+            
+            entity.setId(null);
+            super.create(entity);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
+            throw new ConflictException();
+            
+        }
     }
 
     /**

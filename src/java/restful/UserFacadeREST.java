@@ -3,6 +3,7 @@ package restful;
 import cipher.ServerCipher;
 import entities.LastSignIn;
 import entities.User;
+import entities.UserPrivilege;
 import exceptions.ConflictException;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
@@ -31,6 +32,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.MediaType;
 import resources.EmailService;
 
@@ -70,13 +72,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
         try {
-            entity.setPassword(serverCipher.hash("TEST".getBytes()));
+            if (entity.getPrivilege().equals(UserPrivilege.ADMIN)) {
+                entity.setPassword(serverCipher.hash("TEST".getBytes()));
+            }
             entity.setId(null);
             super.create(entity);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
-           throw new ConflictException();
-           
+            throw new ConflictException();
+
         }
     }
 
@@ -219,11 +223,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
-            throw new NotAuthorizedException(e);
+            throw new NotAuthorizedException("The username or password are incorrect");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> login():{0}", e.getLocalizedMessage());
-            //Throw new read exception
+            throw new ServerErrorException("There was a problem with the server", 500);
         }
         return retUser;
     }
@@ -257,13 +261,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
             // password = "HASHED PASSWORD";
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> resetPassword():{0}", e.getLocalizedMessage());
-            throw new NotFoundException(e);
+            throw new NotFoundException("The username provided could not be found in the database", e);
         } catch (IllegalArgumentException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> resetPassword():{0}", e.getLocalizedMessage());
-            throw new BadRequestException(e);
+            throw new BadRequestException("The username provided does not have the required format", e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> resetPassword():{0}", e.getLocalizedMessage());
-            //Throw new read exception
+            throw new ServerErrorException("There was a problem with the server", 500);
         }
     }
 
@@ -296,9 +300,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
-            throw new NotFoundException(e);
+            throw new NotFoundException("There was a problem finding the user to change the password, try again later", e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> changePassword():{0}", e.getLocalizedMessage());
+            throw new ServerErrorException("There was a problem with the server", 500);
 
         }
     }
@@ -314,9 +319,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             admins = em.createNamedQuery("findAllAdmins").getResultList();
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdmins():{0}", e.getLocalizedMessage());
-            throw new NotFoundException(e);
+            throw new NotFoundException("There are no admins in the database yet, contact with an administrator if you think this might be an error", e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdmins():{0}", e.getLocalizedMessage());
+            throw new ServerErrorException("There was a problem with the server", 500);
 
         }
         return admins;
@@ -334,9 +340,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             admins = em.createNamedQuery("findAllAdminsByLogin").setParameter("login", "%" + login + "%").getResultList();
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
-            throw new NotFoundException(e);
+            throw new NotFoundException("No admins could be found with the specified login "+ login,e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
+            throw new ServerErrorException("There was a problem with the server", 500);
 
         }
         return admins;

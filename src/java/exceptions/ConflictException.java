@@ -15,6 +15,6 @@ import javax.ws.rs.core.Response;
 public class ConflictException extends ClientErrorException{
 
     public ConflictException() {
-        super(Response.Status.CONFLICT); // 409
+        super("The username/email provided already exists in the database", 409); // 409
     }
 }
