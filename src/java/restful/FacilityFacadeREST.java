@@ -57,6 +57,7 @@ public class FacilityFacadeREST extends AbstractFacade<Facility> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Facility entity) {
+        entity.setId(null);
         super.create(entity);
     }
 
