@@ -93,9 +93,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Long id, User entity
-    ) {
-        super.edit(entity);
+    public void edit(@PathParam("id") Long id, User entity) {
+        try {
+            super.edit(entity);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
+            throw new ConflictException();
+
+        }
+
     }
 
     /**
@@ -340,7 +346,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             admins = em.createNamedQuery("findAllAdminsByLogin").setParameter("login", "%" + login + "%").getResultList();
         } catch (NoResultException e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
-            throw new NotFoundException("No admins could be found with the specified login "+ login,e);
+            throw new NotFoundException("No admins could be found with the specified login " + login, e);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "UserEJB --> findAllAdminsByLogin():{0}", e.getLocalizedMessage());
             throw new ServerErrorException("There was a problem with the server", 500);
