@@ -95,12 +95,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Long id, User entity) {
         try {
+            User user = super.find(id);
+            entity.setPassword(user.getPassword());
             super.edit(entity);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "UserEJB --> create():{0}", e.getLocalizedMessage());
-            throw new ConflictException();
+            LOGGER.log(Level.SEVERE, "UserEJB --> edit():{0}", e.getLocalizedMessage());
+            throw new ServerErrorException(500);
 
         }
+        
 
     }
 
